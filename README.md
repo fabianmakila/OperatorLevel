@@ -12,7 +12,7 @@
 Allow players to use F3+F4 and similar client features without giving them OP permissions.
 
 ## Build
-You need JDK 17 to be able to build the plugin.
+You need JDK 21 to be able to build the plugin.
 
 Recommended command for building is `./gradlew build`.
 
