@@ -33,4 +33,10 @@ paper {
         register("operatorlevel.3")
         register("operatorlevel.4")
     }
+
+    serverDependencies {
+        register("LuckPerms") {
+            required = false
+        }
+    }
 }
