@@ -1,6 +1,6 @@
 package fi.fabianadrian.operatorlevel.listener;
 
-import fi.fabianadrian.operatorlevel.OperatorLevel;
+import fi.fabianadrian.operatorlevel.OperatorLevelPaper;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.event.EventBus;
 import net.luckperms.api.event.user.UserDataRecalculateEvent;
@@ -8,9 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 public final class LuckPermsListener {
-	private final OperatorLevel plugin;
+	private final OperatorLevelPaper plugin;
 
-	public LuckPermsListener(OperatorLevel plugin) {
+	public LuckPermsListener(OperatorLevelPaper plugin) {
 		this.plugin = plugin;
 
 		RegisteredServiceProvider<LuckPerms> provider = plugin.getServer().getServicesManager().getRegistration(LuckPerms.class);
@@ -25,6 +25,11 @@ public final class LuckPermsListener {
 
 	private void onUserDataRecalculate(UserDataRecalculateEvent event) {
 		Player player = this.plugin.getServer().getPlayer(event.getUser().getUniqueId());
-		this.plugin.updateOpLevel(player);
+
+		if (player == null) {
+			return;
+		}
+
+		this.plugin.updateOpLevelLuckPerms(player, event.getData().getMetaData());
 	}
 }

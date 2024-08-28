@@ -21,7 +21,7 @@ java {
 }
 
 paper {
-    main = "fi.fabianadrian.operatorlevel.OperatorLevel"
+    main = "fi.fabianadrian.operatorlevel.OperatorLevelPaper"
 
     foliaSupported = true
     apiVersion = "1.19"
