@@ -41,20 +41,12 @@ public final class OperatorLevelPaper extends JavaPlugin {
 	}
 
 	public void updateOpLevelLuckPerms(Player player, CachedMetaData metaData) {
-		int level = 0;
-		try {
-			level = metaData.getMetaValue("operatorlevel", Integer::parseInt).orElse(0);
-		} catch (NumberFormatException ex) {
-			this.getSLF4JLogger().warn(
-					"Could not parse operatorlevel meta for {}. Please check your LuckPerms configuration and make sure that the value is a number between 0 and 4.",
-					player.getName()
-			);
-		}
+		int level = metaData.getMetaValue("operatorlevel", Integer::parseInt).orElse(0);
 
 		// Make sure that the operatorlevel meta is always 0-4
 		if (level < 0 || level > 4) {
 			this.getSLF4JLogger().warn(
-					"Operator level must be between 0 and 4 but {} had a operatorlevel meta of {}! Please check your LuckPerms configuration.",
+					"Operator level must be between 0 and 4 but {} has a level of {}! Please check your LuckPerms configuration.",
 					player.getName(),
 					level
 			);
