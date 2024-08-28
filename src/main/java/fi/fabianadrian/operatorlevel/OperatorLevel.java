@@ -1,6 +1,6 @@
 package fi.fabianadrian.operatorlevel;
 
-import fi.fabianadrian.operatorlevel.listener.LuckpermsListener;
+import fi.fabianadrian.operatorlevel.listener.LuckPermsListener;
 import fi.fabianadrian.operatorlevel.listener.PlayerListener;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -27,7 +27,7 @@ public final class OperatorLevel extends JavaPlugin {
 		manager.registerEvents(new PlayerListener(this), this);
 
 		if (manager.isPluginEnabled("LuckPerms")) {
-			new LuckpermsListener(this);
+			new LuckPermsListener(this);
 		}
 	}
 }
