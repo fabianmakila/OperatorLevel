@@ -25,7 +25,7 @@ public final class OperatorLevelPaper extends JavaPlugin {
 			this.getSLF4JLogger().info("LuckPerms support enabled. Make sure to use meta instead of permissions!");
 
 			this.luckPerms = provider.getProvider();
-			new LuckPermsListener(this);
+			new LuckPermsListener(this, this.luckPerms);
 		}
 
 		manager.registerEvents(new PlayerListener(this), this);
