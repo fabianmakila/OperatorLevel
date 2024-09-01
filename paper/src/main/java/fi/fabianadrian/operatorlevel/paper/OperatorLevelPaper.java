@@ -88,7 +88,8 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 
 	@Override
 	public Path dataPath() {
-		return this.getDataPath();
+		//TODO Switch to this.getDataPath() when minimum version becomes 1.21
+		return this.getDataFolder().toPath();
 	}
 
 	public void reload() {
