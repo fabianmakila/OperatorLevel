@@ -68,7 +68,7 @@ public final class ConfigManager<C> {
 		} catch (InvalidConfigException ex) {
 			this.data = this.helper.getFactory().loadDefaults();
 			this.logger.error(
-					"One of the values in your configuration is not valid. " +
+					"One of the values in your configuration isn't valid. " +
 							"Check to make sure you have specified the right data types.",
 					ex
 			);
@@ -78,7 +78,7 @@ public final class ConfigManager<C> {
 	public C config() {
 		C configData = this.data;
 		if (configData == null) {
-			throw new IllegalStateException("Configuration has not been loaded yet");
+			throw new IllegalStateException("Configuration hasn't been loaded yet");
 		}
 		return configData;
 	}
