@@ -34,7 +34,7 @@ tasks {
 }
 
 paper {
-    main = "fi.fabianadrian.operatorlevel.OperatorLevelPaper"
+    main = "fi.fabianadrian.operatorlevel.paper.OperatorLevelPaper"
 
     foliaSupported = true
     apiVersion = "1.19"

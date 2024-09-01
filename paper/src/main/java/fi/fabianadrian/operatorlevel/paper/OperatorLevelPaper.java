@@ -1,10 +1,10 @@
-package fi.fabianadrian.operatorlevel;
+package fi.fabianadrian.operatorlevel.paper;
 
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import fi.fabianadrian.operatorlevel.common.luckperms.LuckPermsManager;
 import fi.fabianadrian.operatorlevel.common.platform.Platform;
-import fi.fabianadrian.operatorlevel.listener.PlayerListener;
-import fi.fabianadrian.operatorlevel.luckperms.PaperLuckPermsManager;
+import fi.fabianadrian.operatorlevel.paper.listener.PlayerListener;
+import fi.fabianadrian.operatorlevel.paper.luckperms.PaperLuckPermsManager;
 import net.luckperms.api.LuckPerms;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;

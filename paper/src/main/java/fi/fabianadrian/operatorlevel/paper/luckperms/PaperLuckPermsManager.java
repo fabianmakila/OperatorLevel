@@ -1,6 +1,6 @@
-package fi.fabianadrian.operatorlevel.luckperms;
+package fi.fabianadrian.operatorlevel.paper.luckperms;
 
-import fi.fabianadrian.operatorlevel.OperatorLevelPaper;
+import fi.fabianadrian.operatorlevel.paper.OperatorLevelPaper;
 import fi.fabianadrian.operatorlevel.common.luckperms.LuckPermsManager;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;

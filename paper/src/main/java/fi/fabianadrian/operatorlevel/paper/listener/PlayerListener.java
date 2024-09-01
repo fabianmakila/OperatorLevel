@@ -1,6 +1,6 @@
-package fi.fabianadrian.operatorlevel.listener;
+package fi.fabianadrian.operatorlevel.paper.listener;
 
-import fi.fabianadrian.operatorlevel.OperatorLevelPaper;
+import fi.fabianadrian.operatorlevel.paper.OperatorLevelPaper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
