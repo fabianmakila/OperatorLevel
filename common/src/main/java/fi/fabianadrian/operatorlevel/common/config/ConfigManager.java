@@ -1,4 +1,4 @@
-package fi.fabianadrian.operatorlevel.config;
+package fi.fabianadrian.operatorlevel.common.config;
 
 import org.slf4j.Logger;
 import org.yaml.snakeyaml.DumperOptions;

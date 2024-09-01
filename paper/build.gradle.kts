@@ -5,9 +5,10 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":common"))
+
     compileOnly(libs.platform.paper)
     compileOnly(libs.luckperms)
-
     implementation(libs.dazzleconf) {
         exclude("org.yaml")
     }

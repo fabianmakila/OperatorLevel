@@ -1,4 +1,4 @@
-package fi.fabianadrian.operatorlevel.config;
+package fi.fabianadrian.operatorlevel.common.config;
 
 import space.arim.dazzleconf.annote.ConfComments;
 import space.arim.dazzleconf.annote.ConfDefault;

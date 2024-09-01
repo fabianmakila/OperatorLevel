@@ -9,3 +9,4 @@ dependencyResolutionManagement {
 		maven("https://papermc.io/repo/repository/maven-public/")
 	}
 }
+include("common")
