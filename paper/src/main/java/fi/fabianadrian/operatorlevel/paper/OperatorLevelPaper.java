@@ -46,7 +46,7 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 		}
 
 		if (this.luckPermsManager == null) {
-			logger().warn("LuckPermsMeta config option was enabled, but LuckPerms isn't enabled. Falling back to permission-based check.");
+			logger().warn("luckPermsMeta config option was enabled, but LuckPerms isn't enabled. Falling back to permission-based check.");
 			updateLevelPermission(player);
 			return;
 		}
