@@ -32,7 +32,7 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 		this.operatorLevel = new OperatorLevel(this);
 		this.operatorLevel.reload();
 
-		OperatorLevelCommand operatorLevelCommand = new OperatorLevelCommand(this, this.operatorLevel);
+		OperatorLevelCommand operatorLevelCommand = new OperatorLevelCommand(this);
 		operatorLevelCommand.register();
 
 		manager.registerEvents(new PlayerListener(this), this);
@@ -89,5 +89,10 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 	@Override
 	public Path dataPath() {
 		return this.getDataPath();
+	}
+
+	public void reload() {
+		this.operatorLevel.reload();
+		this.getServer().getOnlinePlayers().forEach(this::updateOpLevel);
 	}
 }
