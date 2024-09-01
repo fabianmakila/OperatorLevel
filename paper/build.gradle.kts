@@ -38,7 +38,7 @@ paper {
 
     name = rootProject.name
     foliaSupported = true
-    apiVersion = "1.19"
+    apiVersion = "1.20.6"
     author = "FabianAdrian"
 
     permissions {
