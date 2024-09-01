@@ -2,6 +2,7 @@ package fi.fabianadrian.operatorlevel.paper;
 
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import fi.fabianadrian.operatorlevel.common.platform.Platform;
+import fi.fabianadrian.operatorlevel.paper.command.OperatorLevelCommand;
 import fi.fabianadrian.operatorlevel.paper.listener.PlayerListener;
 import fi.fabianadrian.operatorlevel.paper.luckperms.PaperLuckPermsManager;
 import net.luckperms.api.LuckPerms;
@@ -30,6 +31,9 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 
 		this.operatorLevel = new OperatorLevel(this);
 		this.operatorLevel.reload();
+
+		OperatorLevelCommand operatorLevelCommand = new OperatorLevelCommand(this, this.operatorLevel);
+		operatorLevelCommand.register();
 
 		manager.registerEvents(new PlayerListener(this), this);
 	}
@@ -69,7 +73,7 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 	private void updateLevelPermission(Player player) {
 		byte level = 0;
 		for (int i = 4; i > 0; i--) {
-			if (player.hasPermission("operatorlevel." + i)) {
+			if (player.hasPermission("operatorlevel.level." + i)) {
 				level = (byte) i;
 				break;
 			}

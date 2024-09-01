@@ -2,12 +2,15 @@ package fi.fabianadrian.operatorlevel.common;
 
 import fi.fabianadrian.operatorlevel.common.config.ConfigManager;
 import fi.fabianadrian.operatorlevel.common.config.OperatorLevelConfig;
+import fi.fabianadrian.operatorlevel.common.locale.TranslationManager;
 import fi.fabianadrian.operatorlevel.common.platform.Platform;
 
 public final class OperatorLevel {
 	private final ConfigManager<OperatorLevelConfig> configManager;
 
 	public OperatorLevel(Platform<?> platform) {
+		new TranslationManager(platform.logger());
+
 		this.configManager = ConfigManager.create(
 				platform.dataPath(),
 				"config.yml",

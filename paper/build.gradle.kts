@@ -36,15 +36,17 @@ tasks {
 paper {
     main = "fi.fabianadrian.operatorlevel.paper.OperatorLevelPaper"
 
+    name = rootProject.name
     foliaSupported = true
     apiVersion = "1.19"
     author = "FabianAdrian"
 
     permissions {
-        register("operatorlevel.1")
-        register("operatorlevel.2")
-        register("operatorlevel.3")
-        register("operatorlevel.4")
+        register("operatorlevel.level.1")
+        register("operatorlevel.level.2")
+        register("operatorlevel.level.3")
+        register("operatorlevel.level.4")
+        register("operatorlevel.command.reload")
     }
 
     serverDependencies {

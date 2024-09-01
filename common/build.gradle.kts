@@ -3,7 +3,8 @@ plugins {
 }
 
 dependencies {
-    compileOnly(libs.slf4j)
-    compileOnly(libs.luckperms)
+    compileOnly(libs.adventure)
     compileOnly(libs.dazzleconf)
+    compileOnly(libs.luckperms)
+    compileOnly(libs.slf4j)
 }
