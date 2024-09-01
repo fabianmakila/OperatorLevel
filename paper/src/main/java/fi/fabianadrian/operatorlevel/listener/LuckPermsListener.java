@@ -22,6 +22,6 @@ public final class LuckPermsListener {
 			return;
 		}
 
-		this.plugin.updateOpLevelLuckPerms(player, event.getData().getMetaData());
+		this.plugin.updateOpLevel(player, event.getData().getMetaData());
 	}
 }

@@ -1,5 +1,7 @@
 package fi.fabianadrian.operatorlevel;
 
+import fi.fabianadrian.operatorlevel.config.ConfigManager;
+import fi.fabianadrian.operatorlevel.config.OperatorLevelConfig;
 import fi.fabianadrian.operatorlevel.listener.LuckPermsListener;
 import fi.fabianadrian.operatorlevel.listener.PlayerListener;
 import net.luckperms.api.LuckPerms;
@@ -11,9 +13,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class OperatorLevelPaper extends JavaPlugin {
 	private LuckPerms luckPerms;
+	private ConfigManager<OperatorLevelConfig> configManager;
 
 	@Override
 	public void onEnable() {
+		this.configManager = ConfigManager.create(
+				getDataPath(),
+				"config.yml",
+				OperatorLevelConfig.class,
+				getSLF4JLogger()
+		);
+		this.configManager.load();
+
 		PluginManager manager = getServer().getPluginManager();
 
 		if (manager.isPluginEnabled("LuckPerms")) {
@@ -21,8 +32,6 @@ public final class OperatorLevelPaper extends JavaPlugin {
 			if (provider == null) {
 				return;
 			}
-
-			this.getSLF4JLogger().info("LuckPerms support enabled. Make sure to use meta instead of permissions!");
 
 			this.luckPerms = provider.getProvider();
 			new LuckPermsListener(this, this.luckPerms);
@@ -32,15 +41,23 @@ public final class OperatorLevelPaper extends JavaPlugin {
 	}
 
 	public void updateOpLevel(Player player) {
-		if (this.luckPerms != null) {
+		if (this.configManager.config().luckPermsMeta()) {
 			CachedMetaData metaData = this.luckPerms.getPlayerAdapter(Player.class).getMetaData(player);
-			updateOpLevelLuckPerms(player, metaData);
+			updateLevelLuckPermsMeta(player, metaData);
 		} else {
-			updateOpLevelPermission(player);
+			updateLevelPermission(player);
 		}
 	}
 
-	public void updateOpLevelLuckPerms(Player player, CachedMetaData metaData) {
+	public void updateOpLevel(Player player, CachedMetaData metaData) {
+		if (this.configManager.config().luckPermsMeta()) {
+			updateLevelLuckPermsMeta(player, metaData);
+		} else {
+			updateLevelPermission(player);
+		}
+	}
+
+	private void updateLevelLuckPermsMeta(Player player, CachedMetaData metaData) {
 		int level = metaData.getMetaValue("operatorlevel", Integer::parseInt).orElse(0);
 
 		// Make sure that the operatorlevel meta is always 0-4
@@ -56,7 +73,7 @@ public final class OperatorLevelPaper extends JavaPlugin {
 		player.sendOpLevel((byte) level);
 	}
 
-	private void updateOpLevelPermission(Player player) {
+	private void updateLevelPermission(Player player) {
 		byte level = 0;
 		for (int i = 4; i > 0; i--) {
 			if (player.hasPermission("operatorlevel." + i)) {
@@ -65,5 +82,9 @@ public final class OperatorLevelPaper extends JavaPlugin {
 			}
 		}
 		player.sendOpLevel(level);
+	}
+
+	public void reload() {
+		this.configManager.load();
 	}
 }
