@@ -1,7 +1,6 @@
 package fi.fabianadrian.operatorlevel.paper;
 
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
-import fi.fabianadrian.operatorlevel.common.luckperms.LuckPermsManager;
 import fi.fabianadrian.operatorlevel.common.platform.Platform;
 import fi.fabianadrian.operatorlevel.paper.listener.PlayerListener;
 import fi.fabianadrian.operatorlevel.paper.luckperms.PaperLuckPermsManager;
@@ -86,10 +85,5 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 	@Override
 	public Path dataPath() {
 		return this.getDataPath();
-	}
-
-	@Override
-	public LuckPermsManager luckPermsManager() {
-		return this.luckPermsManager;
 	}
 }
