@@ -1,6 +1,9 @@
 rootProject.name = "OperatorLevel"
 
-include("paper")
+listOf(
+	"common",
+	"paper"
+).forEach { include(it) }
 
 dependencyResolutionManagement {
 	repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
@@ -9,4 +12,3 @@ dependencyResolutionManagement {
 		maven("https://papermc.io/repo/repository/maven-public/")
 	}
 }
-include("common")
