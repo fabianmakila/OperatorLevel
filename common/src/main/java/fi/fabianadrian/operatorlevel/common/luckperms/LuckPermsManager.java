@@ -27,7 +27,7 @@ public abstract class LuckPermsManager {
 			level = Integer.parseInt(unparsed);
 		} catch (NumberFormatException e) {
 			this.platform.logger().warn(
-					"Operator level must be a number between 0 and 4 but {} has a meta value of {}! Please check your LuckPerms configuration.",
+					"Operator level must be a number between 0 and 4 but {} has a meta value of \"{}\"! Please check your LuckPerms configuration.",
 					user.getUsername(),
 					unparsed
 			);
