@@ -14,8 +14,8 @@ public final class PaperLuckPermsManager extends LuckPermsManager {
 		this.playerAdapter = luckPerms.getPlayerAdapter(Player.class);
 	}
 
-	public byte levelFromMeta(Player player) {
+	public int level(Player player) {
 		User user = this.playerAdapter.getUser(player);
-		return levelFromMeta(user);
+		return level(user);
 	}
 }

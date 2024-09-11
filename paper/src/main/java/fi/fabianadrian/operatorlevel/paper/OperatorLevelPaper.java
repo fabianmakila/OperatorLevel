@@ -51,12 +51,12 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 			return;
 		}
 
-		byte level = this.luckPermsManager.levelFromMeta(player);
-		player.sendOpLevel(level);
+		int level = this.luckPermsManager.level(player);
+		player.sendOpLevel((byte) level);
 	}
 
 	@Override
-	public void updateOpLevel(UUID uuid, byte level) {
+	public void updateOpLevel(UUID uuid, int level) {
 		Player player = this.getServer().getPlayer(uuid);
 		if (player == null) {
 			return;
@@ -67,7 +67,7 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 			return;
 		}
 
-		player.sendOpLevel(level);
+		player.sendOpLevel((byte) level);
 	}
 
 	private void updateLevelPermission(Player player) {

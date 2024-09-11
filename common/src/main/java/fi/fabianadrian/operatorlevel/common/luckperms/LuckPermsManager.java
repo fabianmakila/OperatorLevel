@@ -16,10 +16,25 @@ public abstract class LuckPermsManager {
 		eventBus.subscribe(platform, UserDataRecalculateEvent.class, this::onUserDataRecalculate);
 	}
 
-	protected byte levelFromMeta(User user) {
-		int level = user.getCachedData().getMetaData().getMetaValue("operatorlevel", Integer::parseInt).orElse(0);
+	protected int level(User user) {
+		String unparsed = user.getCachedData().getMetaData().getMetaValue("operatorlevel");
+		if (unparsed == null) {
+			return 0;
+		}
 
-		// Make sure that the operatorlevel meta is always 0-4
+		int level;
+		try {
+			level = Integer.parseInt(unparsed);
+		} catch (NumberFormatException e) {
+			this.platform.logger().warn(
+					"Operator level must be a number between 0 and 4 but {} has a meta value of {}! Please check your LuckPerms configuration.",
+					user.getUsername(),
+					unparsed
+			);
+			return 0;
+		}
+
+		// Make sure that the level is always between 0 and 4
 		if (level < 0 || level > 4) {
 			this.platform.logger().warn(
 					"Operator level must be between 0 and 4 but {} has a level of {}! Please check your LuckPerms configuration.",
@@ -34,6 +49,6 @@ public abstract class LuckPermsManager {
 
 	private void onUserDataRecalculate(UserDataRecalculateEvent event) {
 		User user = event.getUser();
-		this.platform.updateOpLevel(user.getUniqueId(), levelFromMeta(user));
+		this.platform.updateOpLevel(user.getUniqueId(), level(user));
 	}
 }

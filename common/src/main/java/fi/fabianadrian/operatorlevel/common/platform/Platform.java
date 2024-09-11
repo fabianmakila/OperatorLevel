@@ -21,5 +21,5 @@ public interface Platform<P> {
 	 * @param uuid UUID of the player
 	 * @param level OP level that will be sent to the player
 	 */
-	void updateOpLevel(UUID uuid, byte level);
+	void updateOpLevel(UUID uuid, int level);
 }
