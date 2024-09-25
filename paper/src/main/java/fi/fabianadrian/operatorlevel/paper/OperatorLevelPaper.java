@@ -6,6 +6,7 @@ import fi.fabianadrian.operatorlevel.paper.command.OperatorLevelCommand;
 import fi.fabianadrian.operatorlevel.paper.listener.PlayerListener;
 import fi.fabianadrian.operatorlevel.paper.luckperms.PaperLuckPermsManager;
 import net.luckperms.api.LuckPerms;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -36,6 +37,8 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 		operatorLevelCommand.register();
 
 		manager.registerEvents(new PlayerListener(this), this);
+
+		new Metrics(this, 23464);
 	}
 
 	@Override

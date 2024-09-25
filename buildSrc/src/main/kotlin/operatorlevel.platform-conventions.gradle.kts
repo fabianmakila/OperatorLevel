@@ -19,6 +19,7 @@ tasks {
 		minimize()
 
 		sequenceOf(
+			"org.bstats",
 			"space.arim.dazzleconf"
 		).forEach { pkg ->
 			relocate(pkg, "fi.fabianadrian.operatorlevel.dependency.$pkg")

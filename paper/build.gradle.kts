@@ -7,10 +7,11 @@ plugins {
 dependencies {
     compileOnly(libs.platform.paper)
 
-    compileOnly(libs.luckperms)
+    implementation(libs.bstats.bukkit)
     implementation(libs.dazzleconf) {
         exclude("org.yaml")
     }
+    compileOnly(libs.luckperms)
 }
 
 tasks {
