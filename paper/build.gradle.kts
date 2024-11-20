@@ -1,6 +1,6 @@
 plugins {
     id("operatorlevel.platform-conventions")
-    alias(libs.plugins.pluginYml.paper)
+    alias(libs.plugins.resourceFactory.paper)
     alias(libs.plugins.run.paper)
 }
 
@@ -21,9 +21,8 @@ tasks {
     }
 }
 
-paper {
+paperPluginYaml {
     main = "fi.fabianadrian.operatorlevel.paper.OperatorLevelPaper"
-
     name = rootProject.name
     foliaSupported = true
     apiVersion = "1.20.6"
@@ -37,9 +36,11 @@ paper {
         register("operatorlevel.command.reload")
     }
 
-    serverDependencies {
-        register("LuckPerms") {
-            required = false
+    dependencies {
+        server {
+            register("LuckPerms") {
+                required = false
+            }
         }
     }
 }
