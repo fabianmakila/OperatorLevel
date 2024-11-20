@@ -43,6 +43,10 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 
 	@Override
 	public void updateOpLevel(Player player) {
+		if (player.isOp()) {
+			return;
+		}
+
 		if (!this.operatorLevel.config().luckPermsMeta()) {
 			updateLevelPermission(player);
 			return;
@@ -61,7 +65,7 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 	@Override
 	public void updateOpLevel(UUID uuid, int level) {
 		Player player = this.getServer().getPlayer(uuid);
-		if (player == null) {
+		if (player == null || player.isOp()) {
 			return;
 		}
 
