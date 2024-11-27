@@ -10,5 +10,6 @@ dependencyResolutionManagement {
 	repositories {
 		mavenCentral()
 		maven("https://papermc.io/repo/repository/maven-public/")
+		maven("https://repo.codemc.io/repository/maven-releases/")
 	}
 }

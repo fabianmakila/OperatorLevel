@@ -1,3 +1,5 @@
+import xyz.jpenilla.resourcefactory.paper.PaperPluginYaml
+
 plugins {
     id("operatorlevel.platform-conventions")
     alias(libs.plugins.resourceFactory.paper)
@@ -12,6 +14,7 @@ dependencies {
         exclude("org.yaml")
     }
     compileOnly(libs.luckperms)
+    compileOnly(libs.packetevents.spigot)
 }
 
 tasks {
@@ -39,7 +42,12 @@ paperPluginYaml {
     dependencies {
         server {
             register("LuckPerms") {
+                load = PaperPluginYaml.Load.BEFORE
                 required = false
+            }
+            register("packetevents") {
+                load = PaperPluginYaml.Load.BEFORE
+                required = true
             }
         }
     }

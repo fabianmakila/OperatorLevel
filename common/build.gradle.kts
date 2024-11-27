@@ -7,4 +7,5 @@ dependencies {
     compileOnly(libs.dazzleconf)
     compileOnly(libs.luckperms)
     compileOnly(libs.slf4j)
+    compileOnly(libs.packetevents.api)
 }
