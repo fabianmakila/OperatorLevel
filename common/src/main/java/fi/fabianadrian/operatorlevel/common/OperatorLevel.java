@@ -36,6 +36,10 @@ public final class OperatorLevel {
 
 	public void sendPacket(Object player, int level) {
 		User user = PacketEvents.getAPI().getPlayerManager().getUser(player);
+		if (user == null) {
+			return;
+		}
+
 		WrapperPlayServerEntityStatus packet = new WrapperPlayServerEntityStatus(user.getEntityId(), 24 + level);
 		user.sendPacketSilently(packet);
 	}
