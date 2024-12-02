@@ -11,7 +11,7 @@ dependencies {
     }
     compileOnly(libs.snakeyaml)
 
-    compileOnlyApi(libs.luckperms)
+    compileOnly(libs.luckperms)
     compileOnly(libs.slf4j)
     compileOnly(libs.packetevents.api)
 }

@@ -4,13 +4,15 @@ import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
 import org.slf4j.Logger;
 
-public abstract class LuckPermsLevelProvider<P> implements LevelProvider<P> {
-	protected final LuckPerms api;
+public final class LuckPermsLevelProvider<P> implements LevelProvider<P> {
+	private final LuckPerms api;
 	private final Logger logger;
+	private final Class<P> playerClass;
 
-	public LuckPermsLevelProvider(LuckPerms api, Logger logger) {
+	public LuckPermsLevelProvider(LuckPerms api, Logger logger, Class<P> playerClass) {
 		this.api = api;
 		this.logger = logger;
+		this.playerClass = playerClass;
 	}
 
 	@Override
@@ -47,5 +49,7 @@ public abstract class LuckPermsLevelProvider<P> implements LevelProvider<P> {
 		return (byte) level;
 	}
 
-	protected abstract User user(P player);
+	private User user(P player) {
+		return this.api.getPlayerAdapter(this.playerClass).getUser(player);
+	}
 }

@@ -2,69 +2,71 @@ package fi.fabianadrian.operatorlevel.sponge;
 
 import com.google.inject.Inject;
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
-import fi.fabianadrian.operatorlevel.common.level.LevelProviderFactory;
-import fi.fabianadrian.operatorlevel.common.platform.Platform;
-import fi.fabianadrian.operatorlevel.sponge.level.SpongeLevelProviderFactory;
-import fi.fabianadrian.operatorlevel.sponge.listener.CommandListener;
+import fi.fabianadrian.operatorlevel.common.Platform;
+import fi.fabianadrian.operatorlevel.sponge.command.SpongeOperatorLevelCommand;
 import fi.fabianadrian.operatorlevel.sponge.listener.PlayerListener;
-import net.luckperms.api.LuckPerms;
 import org.bstats.sponge.Metrics;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.Command;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
-import org.spongepowered.api.event.EventManager;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
 import org.spongepowered.api.event.lifecycle.StartedEngineEvent;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
 
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Plugin("operatorlevel")
 public final class OperatorLevelSponge implements Platform<Player> {
 	private final PluginContainer container;
-	private final Path configDir;
+	private final OperatorLevel<Player> operatorLevel;
 	private final Logger logger;
-	private OperatorLevel<Player> operatorLevel;
-	private LevelProviderFactory<Player> levelProviderFactory;
+	private final Path configDirectory;
 
 	@Inject
 	public OperatorLevelSponge(
 			PluginContainer container,
-			@ConfigDir(sharedRoot = false) Path configDir,
+			@ConfigDir(sharedRoot = false) Path configDirectory,
 			Metrics.Factory metricsFactory
 	) {
 		this.container = container;
-		this.configDir = configDir;
+		this.configDirectory = configDirectory;
 		this.logger = LoggerFactory.getLogger("operatorlevel");
+
+		this.operatorLevel = new OperatorLevel<>(this);
+		this.operatorLevel.createLevelProviderFactory(
+				(player, permission) -> ((ServerPlayer) player).hasPermission(permission),
+				Player.class
+		);
 
 		metricsFactory.make(24064);
 	}
 
 	@Listener
 	public void onServerStart(final StartedEngineEvent<Server> event) {
-		this.operatorLevel = new OperatorLevel<>(this);
-		this.levelProviderFactory = new SpongeLevelProviderFactory(this.operatorLevel);
-
-		if (Sponge.pluginManager().plugin("luckperms").isPresent()) {
-			Optional<LuckPerms> luckPermsOptional = Sponge.serviceProvider().provide(LuckPerms.class);
-			if (luckPermsOptional.isPresent()) {
-				LuckPerms luckPerms = luckPermsOptional.get();
-				this.levelProviderFactory.createLuckPermsProvider(luckPerms);
-				this.operatorLevel.registerLuckPermsListener(luckPerms);
-			}
-		}
-
+		this.operatorLevel.startup();
 		registerListeners();
+	}
 
-		this.operatorLevel.load();
+	@Listener
+	public void onRegisterCommands(final RegisterCommandEvent<Command.Parameterized> event) {
+		event.register(this.container, new SpongeOperatorLevelCommand(this).command(), "operatorlevel");
+	}
+
+	public void registerListeners() {
+		Sponge.eventManager().registerListeners(this.container, new PlayerListener(this.operatorLevel));
+	}
+
+	public void reload() {
+		this.operatorLevel.reload();
+		Sponge.server().onlinePlayers().forEach(this.operatorLevel::updateLevel);
 	}
 
 	@Override
@@ -73,27 +75,8 @@ public final class OperatorLevelSponge implements Platform<Player> {
 	}
 
 	@Override
-	public Path dataPath() {
-		return this.configDir;
-	}
-
-	@Override
-	public LevelProviderFactory<Player> levelProviderFactory() {
-		return this.levelProviderFactory;
-	}
-
-	@Override
-	public void registerListeners() {
-		EventManager manager = Sponge.eventManager();
-		List.of(
-				new CommandListener(this.container, this.operatorLevel),
-				new PlayerListener(this.operatorLevel)
-		).forEach(listener -> manager.registerListeners(this.container, listener));
-	}
-
-	@Override
-	public void updateAll() {
-		Sponge.server().onlinePlayers().forEach(this.operatorLevel::updateLevel);
+	public Path configDirectory() {
+		return this.configDirectory;
 	}
 
 	@Override

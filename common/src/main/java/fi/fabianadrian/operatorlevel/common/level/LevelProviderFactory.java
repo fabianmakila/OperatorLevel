@@ -4,32 +4,40 @@ import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import net.luckperms.api.LuckPerms;
 import org.slf4j.Logger;
 
-public abstract class LevelProviderFactory<P> {
-	private final OperatorLevel<P> operatorLevel;
-	protected final Logger logger;
+import java.util.function.BiFunction;
 
-	public LevelProviderFactory(OperatorLevel<P> operatorLevel) {
+public final class LevelProviderFactory<P> {
+	private final OperatorLevel<P> operatorLevel;
+	private final Logger logger;
+	private final PermissionLevelProvider<P> permissionLevelProvider;
+	private final Class<P> playerClass;
+	private LuckPermsLevelProvider<P> luckPermsLevelProvider;
+
+	public LevelProviderFactory(
+			OperatorLevel<P> operatorLevel,
+			BiFunction<P, String, Boolean> permissionChecker,
+			Class<P> playerClass
+	) {
 		this.operatorLevel = operatorLevel;
 		this.logger = this.operatorLevel.logger();
+		this.permissionLevelProvider = new PermissionLevelProvider<>(permissionChecker);
+		this.playerClass = playerClass;
 	}
 
 	public LevelProvider<P> levelProvider() {
 		if (!this.operatorLevel.config().luckPermsMeta()) {
-			return permissionLevelProvider();
+			return this.permissionLevelProvider;
 		}
 
-		LevelProvider<P> luckPermsProvider = luckPermsLevelProvider();
-		if (luckPermsProvider == null) {
+		if (this.luckPermsLevelProvider == null) {
 			this.logger.warn("luckPermsMeta config option was enabled, but LuckPerms isn't enabled. Falling back to a permission-based check.");
-			return permissionLevelProvider();
+			return this.permissionLevelProvider;
 		}
 
-		return luckPermsProvider;
+		return this.luckPermsLevelProvider;
 	}
 
-	protected abstract PermissionLevelProvider<P> permissionLevelProvider();
-
-	protected abstract LuckPermsLevelProvider<P> luckPermsLevelProvider();
-
-	public abstract void createLuckPermsProvider(LuckPerms luckPerms);
+	public void createLuckPermsProvider(LuckPerms luckPerms) {
+		this.luckPermsLevelProvider = new LuckPermsLevelProvider<P>(luckPerms, this.logger, this.playerClass);
+	}
 }

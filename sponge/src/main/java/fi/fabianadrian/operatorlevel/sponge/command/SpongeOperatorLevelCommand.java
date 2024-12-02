@@ -1,16 +1,17 @@
 package fi.fabianadrian.operatorlevel.sponge.command;
 
-import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import fi.fabianadrian.operatorlevel.common.command.OperatorLevelCommand;
+import fi.fabianadrian.operatorlevel.sponge.OperatorLevelSponge;
 import net.kyori.adventure.text.Component;
 import org.spongepowered.api.command.Command;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.parameter.CommandContext;
-import org.spongepowered.api.entity.living.player.Player;
 
-public final class SpongeOperatorLevelCommand extends OperatorLevelCommand<Player> {
-	public SpongeOperatorLevelCommand(OperatorLevel<Player> operatorLevel) {
-		super(operatorLevel);
+public final class SpongeOperatorLevelCommand extends OperatorLevelCommand {
+	private final OperatorLevelSponge plugin;
+
+	public SpongeOperatorLevelCommand(OperatorLevelSponge plugin) {
+		this.plugin = plugin;
 	}
 
 	public Command.Parameterized command() {
@@ -27,7 +28,7 @@ public final class SpongeOperatorLevelCommand extends OperatorLevelCommand<Playe
 	}
 
 	private CommandResult executeReload(CommandContext ctx) {
-		super.operatorLevel.load();
+		this.plugin.reload();
 		ctx.sendMessage(COMPONENT_RELOAD_COMPLETE);
 		return CommandResult.success();
 	}

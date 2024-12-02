@@ -1,7 +1,7 @@
 package fi.fabianadrian.operatorlevel.common.listener;
 
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
-import fi.fabianadrian.operatorlevel.common.platform.Platform;
+import fi.fabianadrian.operatorlevel.common.Platform;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.event.EventBus;
 import net.luckperms.api.event.user.UserDataRecalculateEvent;

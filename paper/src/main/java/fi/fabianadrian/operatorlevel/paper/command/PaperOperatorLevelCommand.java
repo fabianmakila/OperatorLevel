@@ -4,24 +4,23 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import fi.fabianadrian.operatorlevel.common.command.OperatorLevelCommand;
 import fi.fabianadrian.operatorlevel.paper.OperatorLevelPaper;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import static io.papermc.paper.command.brigadier.Commands.literal;
 
 @SuppressWarnings("UnstableApiUsage")
-public final class PaperOperatorLevelCommand extends OperatorLevelCommand<Player> {
+public final class PaperOperatorLevelCommand extends OperatorLevelCommand {
+	private final OperatorLevelPaper plugin;
 	private final LifecycleEventManager<Plugin> manager;
 
-	public PaperOperatorLevelCommand(OperatorLevelPaper plugin, OperatorLevel<Player> operatorLevel) {
-		super(operatorLevel);
+	public PaperOperatorLevelCommand(OperatorLevelPaper plugin) {
+		this.plugin = plugin;
 		this.manager = plugin.getLifecycleManager();
 	}
 
@@ -40,7 +39,7 @@ public final class PaperOperatorLevelCommand extends OperatorLevelCommand<Player
 	}
 
 	private int executeReload(CommandContext<CommandSourceStack> ctx) {
-		this.operatorLevel.load();
+		this.plugin.reload();
 		ctx.getSource().getSender().sendMessage(COMPONENT_RELOAD_COMPLETE);
 		return Command.SINGLE_SUCCESS;
 	}
