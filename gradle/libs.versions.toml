@@ -3,7 +3,7 @@ bstats = "3.0.2"
 adventure = "4.17.0"
 
 [libraries]
-platform-paper = { module = "io.papermc.paper:paper-api", version = "1.21.1-R0.1-SNAPSHOT" }
+platform-paper = { module = "io.papermc.paper:paper-api", version = "1.21.3-R0.1-SNAPSHOT" }
 
 adventure = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure"}
