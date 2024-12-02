@@ -3,7 +3,7 @@ package fi.fabianadrian.operatorlevel.paper;
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import fi.fabianadrian.operatorlevel.common.level.LevelProviderFactory;
 import fi.fabianadrian.operatorlevel.common.platform.Platform;
-import fi.fabianadrian.operatorlevel.paper.command.OperatorLevelCommand;
+import fi.fabianadrian.operatorlevel.paper.command.PaperOperatorLevelCommand;
 import fi.fabianadrian.operatorlevel.paper.level.PaperLevelProviderFactory;
 import fi.fabianadrian.operatorlevel.paper.listener.PlayerListener;
 import net.luckperms.api.LuckPerms;
@@ -19,7 +19,7 @@ import java.util.UUID;
 
 public final class OperatorLevelPaper extends JavaPlugin implements Platform<Player> {
 	private OperatorLevel<Player> operatorLevel;
-	private PaperLevelProviderFactory levelProviderFactory;
+	private LevelProviderFactory<Player> levelProviderFactory;
 
 	@Override
 	public void onEnable() {
@@ -38,7 +38,7 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 
 		this.operatorLevel.load();
 
-		OperatorLevelCommand operatorLevelCommand = new OperatorLevelCommand(this, this.operatorLevel);
+		PaperOperatorLevelCommand operatorLevelCommand = new PaperOperatorLevelCommand(this, this.operatorLevel);
 		operatorLevelCommand.register();
 
 		registerListeners();

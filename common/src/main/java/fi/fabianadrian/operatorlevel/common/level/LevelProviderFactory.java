@@ -1,6 +1,7 @@
 package fi.fabianadrian.operatorlevel.common.level;
 
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
+import net.luckperms.api.LuckPerms;
 import org.slf4j.Logger;
 
 public abstract class LevelProviderFactory<P> {
@@ -29,4 +30,6 @@ public abstract class LevelProviderFactory<P> {
 	protected abstract PermissionLevelProvider<P> permissionLevelProvider();
 
 	protected abstract LuckPermsLevelProvider<P> luckPermsLevelProvider();
+
+	public abstract void createLuckPermsProvider(LuckPerms luckPerms);
 }

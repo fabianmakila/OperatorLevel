@@ -10,11 +10,6 @@ dependencies {
     compileOnly(libs.platform.paper)
 
     implementation(libs.bstats.bukkit)
-    implementation(libs.dazzleconf) {
-        exclude("org.yaml")
-    }
-    compileOnly(libs.luckperms)
-    compileOnly(libs.packetevents.spigot)
 }
 
 tasks {

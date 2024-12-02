@@ -5,36 +5,29 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
+import fi.fabianadrian.operatorlevel.common.command.OperatorLevelCommand;
 import fi.fabianadrian.operatorlevel.paper.OperatorLevelPaper;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import static io.papermc.paper.command.brigadier.Commands.literal;
 
 @SuppressWarnings("UnstableApiUsage")
-public final class OperatorLevelCommand {
+public final class PaperOperatorLevelCommand extends OperatorLevelCommand<Player> {
 	private final LifecycleEventManager<Plugin> manager;
-	private final Component reloadMessage;
-	private final OperatorLevel<Player> operatorLevel;
 
-	public OperatorLevelCommand(OperatorLevelPaper plugin, OperatorLevel<Player> operatorLevel) {
-		this.operatorLevel = operatorLevel;
+	public PaperOperatorLevelCommand(OperatorLevelPaper plugin, OperatorLevel<Player> operatorLevel) {
+		super(operatorLevel);
 		this.manager = plugin.getLifecycleManager();
-
-		this.reloadMessage = MiniMessage.miniMessage().deserialize(
-				"<#111827>[<#ef4444>OperatorLevel</#ef4444>]</#111827> <lang:operatorlevel.command.reload>"
-		);
 	}
 
 	public void register() {
 		LiteralArgumentBuilder<CommandSourceStack> rootBuilder = literal("operatorlevel")
-				.requires(stack -> stack.getSender().hasPermission("operatorlevel.command.reload"));
+				.requires(stack -> stack.getSender().hasPermission(PERMISSION_RELOAD));
 
 		LiteralCommandNode<CommandSourceStack> reloadNode = rootBuilder.then(literal("reload")
 				.executes(this::executeReload)
@@ -48,7 +41,7 @@ public final class OperatorLevelCommand {
 
 	private int executeReload(CommandContext<CommandSourceStack> ctx) {
 		this.operatorLevel.load();
-		ctx.getSource().getSender().sendMessage(this.reloadMessage);
+		ctx.getSource().getSender().sendMessage(COMPONENT_RELOAD_COMPLETE);
 		return Command.SINGLE_SUCCESS;
 	}
 }
