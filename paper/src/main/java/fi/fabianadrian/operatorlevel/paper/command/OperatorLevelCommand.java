@@ -4,6 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
+import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import fi.fabianadrian.operatorlevel.paper.OperatorLevelPaper;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
@@ -11,18 +12,19 @@ import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import static io.papermc.paper.command.brigadier.Commands.literal;
 
 @SuppressWarnings("UnstableApiUsage")
 public final class OperatorLevelCommand {
-	private final OperatorLevelPaper plugin;
 	private final LifecycleEventManager<Plugin> manager;
 	private final Component reloadMessage;
+	private final OperatorLevel<Player> operatorLevel;
 
-	public OperatorLevelCommand(OperatorLevelPaper plugin) {
-		this.plugin = plugin;
+	public OperatorLevelCommand(OperatorLevelPaper plugin, OperatorLevel<Player> operatorLevel) {
+		this.operatorLevel = operatorLevel;
 		this.manager = plugin.getLifecycleManager();
 
 		this.reloadMessage = MiniMessage.miniMessage().deserialize(
@@ -45,7 +47,7 @@ public final class OperatorLevelCommand {
 	}
 
 	private int executeReload(CommandContext<CommandSourceStack> ctx) {
-		this.plugin.reload();
+		this.operatorLevel.load();
 		ctx.getSource().getSender().sendMessage(this.reloadMessage);
 		return Command.SINGLE_SUCCESS;
 	}

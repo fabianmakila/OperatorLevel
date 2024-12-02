@@ -1,10 +1,11 @@
 package fi.fabianadrian.operatorlevel.paper;
 
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
+import fi.fabianadrian.operatorlevel.common.level.LevelProviderFactory;
 import fi.fabianadrian.operatorlevel.common.platform.Platform;
 import fi.fabianadrian.operatorlevel.paper.command.OperatorLevelCommand;
+import fi.fabianadrian.operatorlevel.paper.level.PaperLevelProviderFactory;
 import fi.fabianadrian.operatorlevel.paper.listener.PlayerListener;
-import fi.fabianadrian.operatorlevel.paper.luckperms.PaperLuckPermsManager;
 import net.luckperms.api.LuckPerms;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.entity.Player;
@@ -17,71 +18,53 @@ import java.nio.file.Path;
 import java.util.UUID;
 
 public final class OperatorLevelPaper extends JavaPlugin implements Platform<Player> {
-	private OperatorLevel operatorLevel;
-	private PaperLuckPermsManager luckPermsManager;
+	private OperatorLevel<Player> operatorLevel;
+	private PaperLevelProviderFactory levelProviderFactory;
 
 	@Override
 	public void onEnable() {
+		this.operatorLevel = new OperatorLevel<>(this);
+		this.levelProviderFactory = new PaperLevelProviderFactory(this.operatorLevel);
+
 		PluginManager manager = getServer().getPluginManager();
 		if (manager.isPluginEnabled("LuckPerms")) {
 			RegisteredServiceProvider<LuckPerms> provider = this.getServer().getServicesManager().getRegistration(LuckPerms.class);
 			if (provider != null) {
-				this.luckPermsManager = new PaperLuckPermsManager(this, provider.getProvider());
+				LuckPerms luckPerms = provider.getProvider();
+				this.levelProviderFactory.createLuckPermsProvider(luckPerms);
+				this.operatorLevel.registerLuckPermsListener(luckPerms);
 			}
 		}
 
-		this.operatorLevel = new OperatorLevel(this);
-		this.operatorLevel.reload();
+		this.operatorLevel.load();
 
-		OperatorLevelCommand operatorLevelCommand = new OperatorLevelCommand(this);
+		OperatorLevelCommand operatorLevelCommand = new OperatorLevelCommand(this, this.operatorLevel);
 		operatorLevelCommand.register();
 
-		manager.registerEvents(new PlayerListener(this), this);
+		registerListeners();
 
 		new Metrics(this, 23464);
 	}
 
 	@Override
-	public void updateOpLevel(Player player) {
-		if (!this.operatorLevel.config().luckPermsMeta()) {
-			updateLevelPermission(player);
-			return;
-		}
-
-		if (this.luckPermsManager == null) {
-			logger().warn("luckPermsMeta config option was enabled, but LuckPerms isn't enabled. Falling back to permission-based check.");
-			updateLevelPermission(player);
-			return;
-		}
-
-		int level = this.luckPermsManager.level(player);
-		this.operatorLevel.sendPacket(player, level);
+	public LevelProviderFactory<Player> levelProviderFactory() {
+		return this.levelProviderFactory;
 	}
 
 	@Override
-	public void updateOpLevel(UUID uuid, int level) {
-		Player player = this.getServer().getPlayer(uuid);
-		if (player == null) {
-			return;
-		}
-
-		if (!this.operatorLevel.config().luckPermsMeta()) {
-			updateLevelPermission(player);
-			return;
-		}
-
-		this.operatorLevel.sendPacket(player, level);
+	public void registerListeners() {
+		PluginManager manager = getServer().getPluginManager();
+		manager.registerEvents(new PlayerListener(this.operatorLevel), this);
 	}
 
-	private void updateLevelPermission(Player player) {
-		int level = 0;
-		for (int i = 4; i > 0; i--) {
-			if (player.hasPermission("operatorlevel.level." + i)) {
-				level = i;
-				break;
-			}
-		}
-		this.operatorLevel.sendPacket(player, level);
+	@Override
+	public void updateAll() {
+		getServer().getOnlinePlayers().forEach(this.operatorLevel::updateLevel);
+	}
+
+	@Override
+	public Player player(UUID uuid) {
+		return getServer().getPlayer(uuid);
 	}
 
 	@Override
@@ -93,10 +76,5 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 	public Path dataPath() {
 		//TODO Switch to this.getDataPath() when minimum version becomes 1.21
 		return this.getDataFolder().toPath();
-	}
-
-	public void reload() {
-		this.operatorLevel.reload();
-		this.getServer().getOnlinePlayers().forEach(this::updateOpLevel);
 	}
 }

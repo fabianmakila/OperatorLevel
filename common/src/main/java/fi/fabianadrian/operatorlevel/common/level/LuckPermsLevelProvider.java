@@ -1,22 +1,22 @@
-package fi.fabianadrian.operatorlevel.common.luckperms;
+package fi.fabianadrian.operatorlevel.common.level;
 
-import fi.fabianadrian.operatorlevel.common.platform.Platform;
 import net.luckperms.api.LuckPerms;
-import net.luckperms.api.event.EventBus;
-import net.luckperms.api.event.user.UserDataRecalculateEvent;
 import net.luckperms.api.model.user.User;
+import org.slf4j.Logger;
 
-public abstract class LuckPermsManager {
-	private final Platform<?> platform;
+public abstract class LuckPermsLevelProvider<P> implements LevelProvider<P> {
+	protected final LuckPerms api;
+	private final Logger logger;
 
-	public LuckPermsManager(Platform<?> platform, LuckPerms luckPerms) {
-		this.platform = platform;
-
-		EventBus eventBus = luckPerms.getEventBus();
-		eventBus.subscribe(platform, UserDataRecalculateEvent.class, this::onUserDataRecalculate);
+	public LuckPermsLevelProvider(LuckPerms api, Logger logger) {
+		this.api = api;
+		this.logger = logger;
 	}
 
-	protected int level(User user) {
+	@Override
+	public int level(P player) {
+		User user = user(player);
+
 		String unparsed = user.getCachedData().getMetaData().getMetaValue("operatorlevel");
 		if (unparsed == null) {
 			return 0;
@@ -26,7 +26,7 @@ public abstract class LuckPermsManager {
 		try {
 			level = Integer.parseInt(unparsed);
 		} catch (NumberFormatException e) {
-			this.platform.logger().warn(
+			this.logger.warn(
 					"Operator level must be a number between 0 and 4 but {} has a meta value of \"{}\"! Please check your LuckPerms configuration.",
 					user.getUsername(),
 					unparsed
@@ -36,7 +36,7 @@ public abstract class LuckPermsManager {
 
 		// Make sure that the level is always between 0 and 4
 		if (level < 0 || level > 4) {
-			this.platform.logger().warn(
+			this.logger.warn(
 					"Operator level must be between 0 and 4 but {} has a level of {}! Please check your LuckPerms configuration.",
 					user.getUsername(),
 					level
@@ -47,8 +47,5 @@ public abstract class LuckPermsManager {
 		return (byte) level;
 	}
 
-	private void onUserDataRecalculate(UserDataRecalculateEvent event) {
-		User user = event.getUser();
-		this.platform.updateOpLevel(user.getUniqueId(), level(user));
-	}
+	protected abstract User user(P player);
 }
