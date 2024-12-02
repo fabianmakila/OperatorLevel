@@ -30,20 +30,6 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 	}
 
 	@Override
-	public void onDisable() {
-		this.operatorLevel.shutdown();
-	}
-
-	public void registerListeners() {
-		getServer().getPluginManager().registerEvents(new PlayerListener(this.operatorLevel), this);
-	}
-
-	public void reload() {
-		this.operatorLevel.reload();
-		getServer().getOnlinePlayers().forEach(this.operatorLevel::updateLevel);
-	}
-
-	@Override
 	public Logger logger() {
 		return getSLF4JLogger();
 	}
@@ -56,5 +42,14 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 	@Override
 	public Player player(UUID uuid) {
 		return getServer().getPlayer(uuid);
+	}
+
+	public void registerListeners() {
+		getServer().getPluginManager().registerEvents(new PlayerListener(this.operatorLevel), this);
+	}
+
+	public void reload() {
+		this.operatorLevel.reload();
+		getServer().getOnlinePlayers().forEach(this.operatorLevel::updateLevel);
 	}
 }

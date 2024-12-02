@@ -38,6 +38,6 @@ public final class LevelProviderFactory<P> {
 	}
 
 	public void createLuckPermsProvider(LuckPerms luckPerms) {
-		this.luckPermsLevelProvider = new LuckPermsLevelProvider<P>(luckPerms, this.logger, this.playerClass);
+		this.luckPermsLevelProvider = new LuckPermsLevelProvider<>(luckPerms, this.logger, this.playerClass);
 	}
 }

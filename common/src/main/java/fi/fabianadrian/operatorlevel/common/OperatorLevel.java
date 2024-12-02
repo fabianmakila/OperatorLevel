@@ -51,10 +51,6 @@ public final class OperatorLevel<P> {
 		PacketEvents.getAPI().getEventManager().registerListener(this.packetListener, PacketListenerPriority.NORMAL);
 	}
 
-	public void shutdown() {
-		PacketEvents.getAPI().getEventManager().unregisterListener(this.packetListener);
-	}
-
 	public void createLevelProviderFactory(BiFunction<P, String, Boolean> permissionChecker, Class<P> playerClass) {
 		this.levelProviderFactory = new LevelProviderFactory<>(this, permissionChecker, playerClass);
 	}

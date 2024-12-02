@@ -12,11 +12,11 @@ import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.Command;
 import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
 import org.spongepowered.api.event.lifecycle.StartedEngineEvent;
+import org.spongepowered.api.service.permission.Subject;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
 
@@ -24,9 +24,9 @@ import java.nio.file.Path;
 import java.util.UUID;
 
 @Plugin("operatorlevel")
-public final class OperatorLevelSponge implements Platform<Player> {
+public final class OperatorLevelSponge implements Platform<ServerPlayer> {
 	private final PluginContainer container;
-	private final OperatorLevel<Player> operatorLevel;
+	private final OperatorLevel<ServerPlayer> operatorLevel;
 	private final Logger logger;
 	private final Path configDirectory;
 
@@ -42,8 +42,8 @@ public final class OperatorLevelSponge implements Platform<Player> {
 
 		this.operatorLevel = new OperatorLevel<>(this);
 		this.operatorLevel.createLevelProviderFactory(
-				(player, permission) -> ((ServerPlayer) player).hasPermission(permission),
-				Player.class
+				Subject::hasPermission,
+				ServerPlayer.class
 		);
 
 		metricsFactory.make(24064);
@@ -60,15 +60,6 @@ public final class OperatorLevelSponge implements Platform<Player> {
 		event.register(this.container, new SpongeOperatorLevelCommand(this).command(), "operatorlevel");
 	}
 
-	public void registerListeners() {
-		Sponge.eventManager().registerListeners(this.container, new PlayerListener(this.operatorLevel));
-	}
-
-	public void reload() {
-		this.operatorLevel.reload();
-		Sponge.server().onlinePlayers().forEach(this.operatorLevel::updateLevel);
-	}
-
 	@Override
 	public Logger logger() {
 		return this.logger;
@@ -82,5 +73,14 @@ public final class OperatorLevelSponge implements Platform<Player> {
 	@Override
 	public ServerPlayer player(UUID uuid) {
 		return Sponge.server().player(uuid).orElse(null);
+	}
+
+	public void registerListeners() {
+		Sponge.eventManager().registerListeners(this.container, new PlayerListener(this.operatorLevel));
+	}
+
+	public void reload() {
+		this.operatorLevel.reload();
+		Sponge.server().onlinePlayers().forEach(this.operatorLevel::updateLevel);
 	}
 }
