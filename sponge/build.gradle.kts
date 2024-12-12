@@ -41,12 +41,12 @@ sponge {
 		dependency("packetevents") {
 			loadOrder(PluginDependency.LoadOrder.AFTER)
 			optional(false)
-			version("2.6.0")
+			version(libs.packetevents.api.get().version)
 		}
 		dependency("luckperms") {
 			loadOrder(PluginDependency.LoadOrder.AFTER)
 			optional(true)
-			version("5.4")
+			version(libs.luckperms.get().version)
 		}
 	}
 }
