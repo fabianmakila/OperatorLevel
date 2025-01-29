@@ -24,7 +24,7 @@ tasks {
 }
 
 sponge {
-	apiVersion("10.0.0")
+	apiVersion("12.0.0")
 	license("GPLv3")
 	loader {
 		name(PluginLoaders.JAVA_PLAIN)
