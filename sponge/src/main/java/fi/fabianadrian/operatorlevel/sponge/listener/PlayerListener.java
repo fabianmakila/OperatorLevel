@@ -4,6 +4,7 @@ import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.ChangeEntityWorldEvent;
+import org.spongepowered.api.event.entity.living.player.RespawnPlayerEvent;
 import org.spongepowered.api.event.network.ServerSideConnectionEvent;
 
 public final class PlayerListener {
@@ -25,5 +26,10 @@ public final class PlayerListener {
 		}
 
 		this.operatorLevel.updateLevel(player);
+	}
+
+	@Listener
+	public void onPostRespawn(RespawnPlayerEvent.Post event) {
+		this.operatorLevel.updateLevel(event.entity());
 	}
 }

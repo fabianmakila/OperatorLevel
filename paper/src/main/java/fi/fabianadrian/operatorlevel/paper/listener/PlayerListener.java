@@ -1,5 +1,6 @@
 package fi.fabianadrian.operatorlevel.paper.listener;
 
+import com.destroystokyo.paper.event.player.PlayerPostRespawnEvent;
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,6 +22,11 @@ public final class PlayerListener implements Listener {
 
 	@EventHandler
 	public void onWorldChange(PlayerChangedWorldEvent event) {
+		this.operatorLevel.updateLevel(event.getPlayer());
+	}
+
+	@EventHandler
+	public void onPostRespawn(PlayerPostRespawnEvent event) {
 		this.operatorLevel.updateLevel(event.getPlayer());
 	}
 }
