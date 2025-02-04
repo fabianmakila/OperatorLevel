@@ -19,7 +19,7 @@ import java.util.function.BiFunction;
 public final class OperatorLevel<P> {
 	private final ConfigManager<OperatorLevelConfig> configManager;
 	private final PacketSender packetSender = new PacketSender();
-	private final PacketListener packetListener = new PacketListener();
+	private final PacketListener packetListener = new PacketListener(this);
 	private final Platform<P> platform;
 	private LevelProviderFactory<P> levelProviderFactory;
 	private LevelProvider<P> levelProvider;
