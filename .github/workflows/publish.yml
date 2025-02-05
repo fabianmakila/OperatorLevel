@@ -27,3 +27,6 @@ jobs:
           modrinth-id: MowAmAh0
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          loaders: |
+            paper
+            sponge
