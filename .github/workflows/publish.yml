@@ -1,0 +1,20 @@
+name: Publish on Release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: build/libs/
+      - uses: Kir-Antipov/mc-publish@v3
+        with:
+          modrinth-id: MowAmAh0
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
