@@ -7,6 +7,7 @@ plugins {
 }
 
 dependencies {
+	compileOnly(libs.packetevents.sponge)
 	implementation(libs.slf4j)
 	implementation(libs.bstats.sponge)
 	implementation(libs.snakeyaml)
@@ -24,6 +25,7 @@ tasks {
 }
 
 sponge {
+	injectRepositories(false)
 	apiVersion("12.0.0")
 	license("GPLv3")
 	loader {

@@ -8,6 +8,7 @@ plugins {
 
 dependencies {
     compileOnly(libs.platform.paper)
+    compileOnly(libs.packetevents.spigot)
 
     implementation(libs.bstats.bukkit)
 }
@@ -31,6 +32,10 @@ paperPluginYaml {
         register("operatorlevel.level.2")
         register("operatorlevel.level.3")
         register("operatorlevel.level.4")
+        register("operatorlevel.gamemode.adventure")
+        register("operatorlevel.gamemode.survival")
+        register("operatorlevel.gamemode.creative")
+        register("operatorlevel.gamemode.spectator")
         register("operatorlevel.command.reload")
     }
 
