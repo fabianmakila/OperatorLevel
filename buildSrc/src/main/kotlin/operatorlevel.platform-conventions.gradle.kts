@@ -14,7 +14,7 @@ tasks {
 	shadowJar {
 		archiveBaseName.set("${rootProject.name}-${project.name.replaceFirstChar(Char::titlecase)}")
 		archiveClassifier.set("")
-		destinationDirectory.set(file("${rootProject.rootDir}/dist"))
+		destinationDirectory.set(rootProject.layout.buildDirectory.dir("libs"))
 
 		minimize()
 
