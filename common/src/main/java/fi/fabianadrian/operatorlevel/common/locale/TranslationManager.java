@@ -2,41 +2,40 @@ package fi.fabianadrian.operatorlevel.common.locale;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.translation.GlobalTranslator;
-import net.kyori.adventure.translation.TranslationRegistry;
+import net.kyori.adventure.translation.TranslationStore;
 import org.slf4j.Logger;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 public final class TranslationManager {
-	public static final Locale DEFAULT_LOCALE = Locale.ENGLISH;
-	public static final List<Locale> BUNDLED_LOCALES = List.of(Locale.of("fi", "FI"));
+	public static final List<Locale> BUNDLED_LOCALES = List.of(Locale.ENGLISH, Locale.of("fi", "FI"));
 
 	private final Logger logger;
-	private final TranslationRegistry registry;
+	private final TranslationStore.StringBased<MessageFormat> store;
 
 	public TranslationManager(Logger logger) {
 		this.logger = logger;
 
-		this.registry = TranslationRegistry.create(Key.key("operatorlevel", "main"));
-		this.registry.defaultLocale(DEFAULT_LOCALE);
+		this.store = TranslationStore.messageFormat(Key.key("operatorlevel", "main"));
+		this.store.defaultLocale(Locale.ENGLISH);
 
 		loadFromResourceBundle();
 
-		GlobalTranslator.translator().addSource(this.registry);
+		GlobalTranslator.translator().addSource(this.store);
 	}
 
 	private void loadFromResourceBundle() {
-		ResourceBundle defaultBundle = ResourceBundle.getBundle("messages", DEFAULT_LOCALE);
-		try {
-			this.registry.registerAll(DEFAULT_LOCALE, defaultBundle, false);
-			BUNDLED_LOCALES.forEach(locale -> {
-				ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
-				this.registry.registerAll(locale, bundle, false);
-			});
-		} catch (IllegalArgumentException e) {
-			this.logger.warn("Error loading default locale file", e);
-		}
+		BUNDLED_LOCALES.forEach(locale -> {
+			ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+			try {
+				this.store.registerAll(locale, bundle, false);
+			} catch (IllegalArgumentException e) {
+				this.logger.warn("Error loading default locale file", e);
+			}
+		});
+
 	}
 }

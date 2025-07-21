@@ -1,18 +1,18 @@
 [versions]
 bstats = "3.0.2"
-adventure = "4.18.0"
+adventure = "4.23.0"
 
 [libraries]
-platform-paper = { module = "io.papermc.paper:paper-api", version = "1.21.4-R0.1-SNAPSHOT" }
+platform-paper = { module = "io.papermc.paper:paper-api", version = "1.21.8-R0.1-SNAPSHOT" }
 
 adventure = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
 bstats-bukkit = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
 bstats-sponge = { module = "org.bstats:bstats-sponge", version.ref = "bstats" }
 dazzleconf = { module = "space.arim.dazzleconf:dazzleconf-ext-snakeyaml", version = "1.3.0-M2" }
-luckperms = { module = "net.luckperms:api", version = "5.4" }
+luckperms = { module = "net.luckperms:api", version = "5.5" }
 slf4j = { module = "org.slf4j:slf4j-api", version = "2.0.12" }
-packetevents-api = { module = "com.github.retrooper:packetevents-api", version = "2.7.0" }
+packetevents-api = { module = "com.github.retrooper:packetevents-api", version = "2.9.3" }
 snakeyaml = { module = "org.yaml:snakeyaml", version = "2.3" }
 
 [plugins]
