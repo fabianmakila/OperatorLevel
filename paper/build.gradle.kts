@@ -16,7 +16,10 @@ dependencies {
 tasks {
     runServer {
         // This should be the minimum supported version
-        minecraftVersion("1.20.6")
+        minecraftVersion("1.21.4")
+        downloadPlugins {
+            modrinth("packetevents", "2.9.3+spigot")
+        }
     }
 }
 
@@ -24,7 +27,7 @@ paperPluginYaml {
     main = "fi.fabianadrian.operatorlevel.paper.OperatorLevelPaper"
     name = rootProject.name
     foliaSupported = true
-    apiVersion = "1.20.6"
+    apiVersion = "1.21.4"
     author = "FabianAdrian"
 
     permissions {
