@@ -24,13 +24,15 @@ public final class OperatorLevel<P> {
 	private final ConfigManager<OperatorLevelConfig> configManager;
 	private final PacketSender packetSender = new PacketSender();
 	private final Platform<P> platform;
+	private final TranslationManager translationManager;
 	private LevelProviderFactory<P> levelProviderFactory;
 	private LevelProvider<P> levelProvider;
 
 	public OperatorLevel(Platform<P> platform) {
 		this.platform = platform;
 
-		new TranslationManager(platform.logger());
+		this.translationManager = new TranslationManager(platform.logger(), platform.configDirectory().resolve("locale"));
+		this.translationManager.load();
 
 		this.configManager = ConfigManager.create(
 				platform.configDirectory(),
@@ -63,6 +65,7 @@ public final class OperatorLevel<P> {
 	}
 
 	public void reload() {
+		this.translationManager.load();
 		this.configManager.load();
 		this.levelProvider = this.levelProviderFactory.levelProvider();
 	}
