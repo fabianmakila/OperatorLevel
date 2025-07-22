@@ -74,7 +74,7 @@ public final class TranslationManager {
 			try {
 				Files.copy(this.getClass().getClassLoader().getResourceAsStream(fileName), defaultBundlePath);
 			} catch (IOException e) {
-				this.logger.error("Could not write default bundle", e);
+				this.logger.error("Couldn't write bundled locale", e);
 			}
 		});
 	}
