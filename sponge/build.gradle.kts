@@ -26,7 +26,7 @@ tasks {
 
 sponge {
 	injectRepositories(false)
-	apiVersion("12.0.0")
+	apiVersion("15.0.0-SNAPSHOT")
 	license("GPLv3")
 	loader {
 		name(PluginLoaders.JAVA_PLAIN)

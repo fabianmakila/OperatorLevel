@@ -4,7 +4,6 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.Translator;
-import net.kyori.adventure.util.UTF8ResourceBundleControl;
 import org.slf4j.Logger;
 
 import java.io.BufferedReader;
@@ -110,7 +109,7 @@ public final class TranslationManager {
 	}
 
 	private void registerDefaultLocale() {
-		ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.US, UTF8ResourceBundleControl.get());
+		ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.US);
 		try {
 			this.store.registerAll(Locale.US, bundle, false);
 		} catch (IllegalArgumentException e) {

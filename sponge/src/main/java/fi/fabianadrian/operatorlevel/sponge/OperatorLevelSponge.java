@@ -26,6 +26,7 @@ import org.spongepowered.api.service.permission.Subject;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
 
+import java.lang.invoke.MethodHandles;
 import java.nio.file.Path;
 import java.util.Locale;
 import java.util.UUID;
@@ -103,7 +104,7 @@ public final class OperatorLevelSponge implements Platform<ServerPlayer> {
 	}
 
 	public void registerListeners() {
-		Sponge.eventManager().registerListeners(this.container, new PlayerListener(this.operatorLevel));
+		Sponge.eventManager().registerListeners(this.container, new PlayerListener(this.operatorLevel), MethodHandles.lookup());
 	}
 
 	public void reload() {
