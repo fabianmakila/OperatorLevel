@@ -16,8 +16,6 @@ tasks {
 		archiveClassifier.set("")
 		destinationDirectory.set(rootProject.layout.buildDirectory.dir("libs"))
 
-		minimize()
-
 		sequenceOf(
 			"org.bstats",
 			"space.arim.dazzleconf"
