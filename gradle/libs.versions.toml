@@ -1,7 +1,7 @@
 [versions]
 bstats = "3.0.2"
 adventure = "4.23.0"
-packetevents = "2.9.3"
+packetevents = "2.10.1"
 
 [libraries]
 platform-paper = { module = "io.papermc.paper:paper-api", version = "1.21.8-R0.1-SNAPSHOT" }
