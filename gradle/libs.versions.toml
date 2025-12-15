@@ -16,7 +16,6 @@ slf4j = { module = "org.slf4j:slf4j-api", version = "2.0.16" }
 packetevents-api = { module = "com.github.retrooper:packetevents-api", version.ref = "packetevents" }
 packetevents-spigot = { module = "com.github.retrooper:packetevents-spigot", version.ref = "packetevents" }
 packetevents-sponge = { module = "com.github.retrooper:packetevents-sponge", version.ref = "packetevents" }
-snakeyaml = { module = "org.yaml:snakeyaml", version = "2.3" }
 
 [plugins]
 sponge = { id = "org.spongepowered.gradle.plugin", version = "2.2.0" }

@@ -10,14 +10,12 @@ dependencies {
 	compileOnly(libs.packetevents.sponge)
 	implementation(libs.slf4j)
 	implementation(libs.bstats.sponge)
-	implementation(libs.snakeyaml)
 }
 
 tasks {
 	shadowJar {
 		sequenceOf(
-			"org.slf4j",
-			"org.yaml"
+			"org.slf4j"
 		).forEach { pkg ->
 			relocate(pkg, "fi.fabianadrian.operatorlevel.dependency.$pkg")
 		}
