@@ -1,11 +1,11 @@
 package fi.fabianadrian.operatorlevel.common.config;
 
-import space.arim.dazzleconf.annote.ConfComments;
-import space.arim.dazzleconf.annote.ConfDefault;
+import space.arim.dazzleconf.engine.Comments;
 
-@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public interface OperatorLevelConfig {
-	@ConfComments("Use LuckPerms' meta system instead of permissions to define levels.")
-	@ConfDefault.DefaultBoolean(false)
-	boolean luckPermsMeta();
+	@Comments("Use LuckPerms' meta system to define levels.")
+	@Comments("Will fallback to a permission based system if LuckPerms isn't available.")
+	default boolean luckPermsMeta() {
+		return true;
+	}
 }

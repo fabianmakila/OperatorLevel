@@ -20,7 +20,7 @@ public final class PlayServerEntityStatusListener implements com.github.retroope
 
 		WrapperPlayServerEntityStatus packet = new WrapperPlayServerEntityStatus(event);
 		int status = packet.getStatus();
-		if (status > 23 && status < 29) {
+		if (status >= 24 && status <= 28) {
 			event.setCancelled(true);
 			// Player is null when this packet is sent on join, we'll use the join event listener instead
 			if (event.getPlayer() == null) {

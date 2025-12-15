@@ -26,11 +26,12 @@ public final class LevelProviderFactory<P> {
 
 	public LevelProvider<P> levelProvider() {
 		if (!this.operatorLevel.config().luckPermsMeta()) {
+			this.logger.info("Using permission-based check (operatorlevel.level.x) for levels");
 			return this.permissionLevelProvider;
 		}
 
 		if (this.luckPermsLevelProvider == null) {
-			this.logger.warn("luckPermsMeta config option was enabled, but LuckPerms isn't enabled. Falling back to a permission-based check.");
+			this.logger.warn("LuckPerms isn't available. Falling back to a permission-based check for levels");
 			return this.permissionLevelProvider;
 		}
 

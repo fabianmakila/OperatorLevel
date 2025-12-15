@@ -6,10 +6,7 @@ dependencies {
     compileOnly(libs.adventure)
     compileOnly(libs.adventure.text.minimessage)
 
-    implementation(libs.dazzleconf) {
-        exclude("org.yaml")
-    }
-    compileOnly(libs.snakeyaml)
+    implementation(libs.dazzleconf)
 
     compileOnly(libs.luckperms)
     compileOnly(libs.slf4j)

@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 public final class OperatorLevel<P> {
-	private final ConfigManager<OperatorLevelConfig> configManager;
 	private final PacketSender packetSender = new PacketSender();
 	private final Platform<P> platform;
 	private final TranslationManager translationManager;
+	private final ConfigManager configManager;
 	private LevelProviderFactory<P> levelProviderFactory;
 	private LevelProvider<P> levelProvider;
 
@@ -34,12 +34,7 @@ public final class OperatorLevel<P> {
 		this.translationManager = new TranslationManager(platform.logger(), platform.configDirectory().resolve("locale"));
 		this.translationManager.load();
 
-		this.configManager = ConfigManager.create(
-				platform.configDirectory(),
-				"config.yml",
-				OperatorLevelConfig.class,
-				platform.logger()
-		);
+		this.configManager = new ConfigManager(platform);
 		this.configManager.load();
 	}
 
