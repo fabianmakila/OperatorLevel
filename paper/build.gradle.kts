@@ -29,6 +29,7 @@ paperPluginYaml {
     foliaSupported = true
     apiVersion = "1.21.4"
     author = "FabianAdrian"
+    website = "https://modrinth.com/plugin/operatorlevel"
 
     permissions {
         register("operatorlevel.level.1")
