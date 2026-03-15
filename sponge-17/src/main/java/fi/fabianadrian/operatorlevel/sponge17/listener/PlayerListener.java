@@ -1,4 +1,4 @@
-package fi.fabianadrian.operatorlevel.sponge.listener;
+package fi.fabianadrian.operatorlevel.sponge17.listener;
 
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;

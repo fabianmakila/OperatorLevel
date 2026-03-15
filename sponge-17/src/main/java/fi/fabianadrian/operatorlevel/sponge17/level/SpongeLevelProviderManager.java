@@ -1,4 +1,4 @@
-package fi.fabianadrian.operatorlevel.sponge.level;
+package fi.fabianadrian.operatorlevel.sponge17.level;
 
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import fi.fabianadrian.operatorlevel.common.level.LevelProviderManager;

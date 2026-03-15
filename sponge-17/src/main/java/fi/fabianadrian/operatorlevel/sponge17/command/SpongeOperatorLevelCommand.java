@@ -1,7 +1,7 @@
-package fi.fabianadrian.operatorlevel.sponge.command;
+package fi.fabianadrian.operatorlevel.sponge17.command;
 
 import fi.fabianadrian.operatorlevel.common.command.OperatorLevelCommand;
-import fi.fabianadrian.operatorlevel.sponge.OperatorLevelSponge;
+import fi.fabianadrian.operatorlevel.sponge17.OperatorLevelSponge;
 import net.kyori.adventure.text.Component;
 import org.spongepowered.api.command.Command;
 import org.spongepowered.api.command.CommandResult;

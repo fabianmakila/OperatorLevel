@@ -1,13 +1,13 @@
-package fi.fabianadrian.operatorlevel.sponge;
+package fi.fabianadrian.operatorlevel.sponge17;
 
 import com.github.retrooper.packetevents.protocol.player.GameMode;
 import com.google.inject.Inject;
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import fi.fabianadrian.operatorlevel.common.Platform;
 import fi.fabianadrian.operatorlevel.common.level.LevelProviderManager;
-import fi.fabianadrian.operatorlevel.sponge.command.SpongeOperatorLevelCommand;
-import fi.fabianadrian.operatorlevel.sponge.level.SpongeLevelProviderManager;
-import fi.fabianadrian.operatorlevel.sponge.listener.PlayerListener;
+import fi.fabianadrian.operatorlevel.sponge17.command.SpongeOperatorLevelCommand;
+import fi.fabianadrian.operatorlevel.sponge17.level.SpongeLevelProviderManager;
+import fi.fabianadrian.operatorlevel.sponge17.listener.PlayerListener;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.bstats.sponge.Metrics;
