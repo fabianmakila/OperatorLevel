@@ -3,7 +3,9 @@ package fi.fabianadrian.operatorlevel.paper;
 import com.github.retrooper.packetevents.protocol.player.GameMode;
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import fi.fabianadrian.operatorlevel.common.Platform;
+import fi.fabianadrian.operatorlevel.common.level.LevelProviderManager;
 import fi.fabianadrian.operatorlevel.paper.command.PaperOperatorLevelCommand;
+import fi.fabianadrian.operatorlevel.paper.level.PaperLevelProviderManager;
 import fi.fabianadrian.operatorlevel.paper.listener.PlayerListener;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
@@ -18,13 +20,17 @@ import java.util.Locale;
 import java.util.UUID;
 
 public final class OperatorLevelPaper extends JavaPlugin implements Platform<Player> {
-	private OperatorLevel<Player> operatorLevel;
+	private final OperatorLevel<Player> operatorLevel;
+	private final PaperLevelProviderManager levelProviderManager;
+
+	public OperatorLevelPaper() {
+		this.operatorLevel = new OperatorLevel<>(this);
+		this.levelProviderManager = new PaperLevelProviderManager(this.operatorLevel);
+	}
 
 	@Override
 	public void onEnable() {
-		this.operatorLevel = new OperatorLevel<>(this);
-		this.operatorLevel.createLevelProviderFactory(Player::hasPermission, Player.class);
-		this.operatorLevel.startup();
+		this.operatorLevel.load();
 
 		PaperOperatorLevelCommand operatorLevelCommand = new PaperOperatorLevelCommand(this);
 		operatorLevelCommand.register();
@@ -70,12 +76,18 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 		});
 	}
 
+	@Override
+	public LevelProviderManager<Player> levelProviderManager() {
+		return this.levelProviderManager;
+	}
+
 	public void registerListeners() {
 		getServer().getPluginManager().registerEvents(new PlayerListener(this.operatorLevel), this);
+		this.operatorLevel.registerPacketEventsListeners();
 	}
 
 	public void reload() {
-		this.operatorLevel.reload();
+		this.operatorLevel.load();
 		getServer().getOnlinePlayers().forEach(this.operatorLevel::updateLevel);
 	}
 }

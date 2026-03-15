@@ -1,5 +1,6 @@
 package fi.fabianadrian.operatorlevel.common.locale;
 
+import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
 import net.kyori.adventure.translation.GlobalTranslator;
@@ -21,9 +22,9 @@ public final class TranslationManager {
 	private final Logger logger;
 	private MiniMessageTranslationStore store;
 
-	public TranslationManager(Logger logger, Path localeDirectoryPath) {
-		this.logger = logger;
-		this.localeDirectoryPath = localeDirectoryPath;
+	public TranslationManager(OperatorLevel<?> operatorLevel) {
+		this.logger = operatorLevel.logger();
+		this.localeDirectoryPath = operatorLevel.configDirectory().resolve("locale");
 	}
 
 	private static boolean isAdventureDuplicatesException(Exception e) {

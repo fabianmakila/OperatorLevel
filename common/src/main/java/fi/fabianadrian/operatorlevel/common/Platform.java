@@ -1,6 +1,7 @@
 package fi.fabianadrian.operatorlevel.common;
 
 import com.github.retrooper.packetevents.protocol.player.GameMode;
+import fi.fabianadrian.operatorlevel.common.level.LevelProviderManager;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
@@ -14,4 +15,6 @@ public interface Platform<P> {
 	P player(UUID uuid);
 
 	void attemptGameModeChange(P player, GameMode gameMode);
+
+	LevelProviderManager<P> levelProviderManager();
 }

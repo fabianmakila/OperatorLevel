@@ -1,6 +1,7 @@
 package fi.fabianadrian.operatorlevel.common.level;
 
 import net.luckperms.api.LuckPerms;
+import net.luckperms.api.LuckPermsProvider;
 import net.luckperms.api.model.user.User;
 import org.slf4j.Logger;
 
@@ -9,10 +10,10 @@ public final class LuckPermsLevelProvider<P> implements LevelProvider<P> {
 	private final Logger logger;
 	private final Class<P> playerClass;
 
-	public LuckPermsLevelProvider(LuckPerms api, Logger logger, Class<P> playerClass) {
-		this.api = api;
+	public LuckPermsLevelProvider(Logger logger, Class<P> playerClass) {
 		this.logger = logger;
 		this.playerClass = playerClass;
+		this.api = LuckPermsProvider.get();
 	}
 
 	@Override

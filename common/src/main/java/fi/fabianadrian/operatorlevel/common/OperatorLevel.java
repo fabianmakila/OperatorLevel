@@ -6,71 +6,48 @@ import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import com.github.retrooper.packetevents.protocol.player.GameMode;
 import fi.fabianadrian.operatorlevel.common.config.ConfigManager;
 import fi.fabianadrian.operatorlevel.common.config.OperatorLevelConfig;
-import fi.fabianadrian.operatorlevel.common.level.LevelProvider;
-import fi.fabianadrian.operatorlevel.common.level.LevelProviderFactory;
-import fi.fabianadrian.operatorlevel.common.listener.LuckPermsListener;
 import fi.fabianadrian.operatorlevel.common.locale.TranslationManager;
 import fi.fabianadrian.operatorlevel.common.packet.PacketSender;
 import fi.fabianadrian.operatorlevel.common.packet.listener.PlayClientChangeGameModeListener;
 import fi.fabianadrian.operatorlevel.common.packet.listener.PlayServerEntityStatusListener;
-import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
 import org.slf4j.Logger;
 
+import java.nio.file.Path;
 import java.util.List;
-import java.util.function.BiFunction;
 
 public final class OperatorLevel<P> {
 	private final PacketSender packetSender = new PacketSender();
 	private final Platform<P> platform;
 	private final TranslationManager translationManager;
 	private final ConfigManager configManager;
-	private LevelProviderFactory<P> levelProviderFactory;
-	private LevelProvider<P> levelProvider;
 
 	public OperatorLevel(Platform<P> platform) {
 		this.platform = platform;
 
-		this.translationManager = new TranslationManager(platform.logger(), platform.configDirectory().resolve("locale"));
+		this.translationManager = new TranslationManager(this);
+		this.configManager = new ConfigManager(this);
+	}
+
+	public void load() {
 		this.translationManager.load();
-
-		this.configManager = new ConfigManager(platform);
 		this.configManager.load();
-	}
-
-	public void startup() {
-		try {
-			LuckPerms luckPerms = LuckPermsProvider.get();
-			this.levelProviderFactory.createLuckPermsProvider(luckPerms);
-			new LuckPermsListener<>(this.platform, luckPerms, this);
-		} catch (NoClassDefFoundError ignored) {
-
-		}
-
-		this.levelProvider = levelProviderFactory.levelProvider();
-		registerPacketEventsListeners();
-	}
-
-	public void createLevelProviderFactory(BiFunction<P, String, Boolean> permissionChecker, Class<P> playerClass) {
-		this.levelProviderFactory = new LevelProviderFactory<>(this, permissionChecker, playerClass);
+		this.platform.levelProviderManager().load();
 	}
 
 	public OperatorLevelConfig config() {
 		return this.configManager.config();
 	}
 
-	public void reload() {
-		this.translationManager.load();
-		this.configManager.load();
-		this.levelProvider = this.levelProviderFactory.levelProvider();
-	}
-
 	public Logger logger() {
 		return this.platform.logger();
 	}
 
+	public Path configDirectory() {
+		return this.platform.configDirectory();
+	}
+
 	public void updateLevel(P player) {
-		int level = this.levelProvider.level(player);
+		int level = this.platform.levelProviderManager().provider().level(player);
 		this.packetSender.sendPacket(player, level);
 	}
 
@@ -78,7 +55,7 @@ public final class OperatorLevel<P> {
 		this.platform.attemptGameModeChange(player, gameMode);
 	}
 
-	private void registerPacketEventsListeners() {
+	public void registerPacketEventsListeners() {
 		EventManager manager = PacketEvents.getAPI().getEventManager();
 		List.of(
 				new PlayClientChangeGameModeListener(this),

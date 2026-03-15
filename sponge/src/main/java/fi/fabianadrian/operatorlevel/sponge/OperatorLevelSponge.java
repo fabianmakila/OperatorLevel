@@ -4,7 +4,9 @@ import com.github.retrooper.packetevents.protocol.player.GameMode;
 import com.google.inject.Inject;
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import fi.fabianadrian.operatorlevel.common.Platform;
+import fi.fabianadrian.operatorlevel.common.level.LevelProviderManager;
 import fi.fabianadrian.operatorlevel.sponge.command.SpongeOperatorLevelCommand;
+import fi.fabianadrian.operatorlevel.sponge.level.SpongeLevelProviderManager;
 import fi.fabianadrian.operatorlevel.sponge.listener.PlayerListener;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
@@ -22,7 +24,6 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
 import org.spongepowered.api.event.lifecycle.StartedEngineEvent;
 import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.api.service.permission.Subject;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
 
@@ -37,6 +38,7 @@ public final class OperatorLevelSponge implements Platform<ServerPlayer> {
 	private final OperatorLevel<ServerPlayer> operatorLevel;
 	private final Logger logger;
 	private final Path configDirectory;
+	private final SpongeLevelProviderManager levelProviderManager;
 
 	@Inject
 	public OperatorLevelSponge(
@@ -49,17 +51,15 @@ public final class OperatorLevelSponge implements Platform<ServerPlayer> {
 		this.logger = LoggerFactory.getLogger("operatorlevel");
 
 		this.operatorLevel = new OperatorLevel<>(this);
-		this.operatorLevel.createLevelProviderFactory(
-				Subject::hasPermission,
-				ServerPlayer.class
-		);
+
+		this.levelProviderManager = new SpongeLevelProviderManager(this.operatorLevel);
 
 		metricsFactory.make(24064);
 	}
 
 	@Listener
 	public void onServerStart(final StartedEngineEvent<Server> event) {
-		this.operatorLevel.startup();
+		this.operatorLevel.load();
 		registerListeners();
 	}
 
@@ -103,12 +103,18 @@ public final class OperatorLevelSponge implements Platform<ServerPlayer> {
 		}).build());
 	}
 
+	@Override
+	public LevelProviderManager<ServerPlayer> levelProviderManager() {
+		return this.levelProviderManager;
+	}
+
 	public void registerListeners() {
 		Sponge.eventManager().registerListeners(this.container, new PlayerListener(this.operatorLevel), MethodHandles.lookup());
+		this.operatorLevel.registerPacketEventsListeners();
 	}
 
 	public void reload() {
-		this.operatorLevel.reload();
+		this.operatorLevel.load();
 		Sponge.server().onlinePlayers().forEach(this.operatorLevel::updateLevel);
 	}
 }
