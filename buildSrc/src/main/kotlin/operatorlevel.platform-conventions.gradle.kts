@@ -17,7 +17,7 @@ tasks {
 		destinationDirectory.set(rootProject.layout.buildDirectory.dir("libs"))
 
 		sequenceOf(
-			"org.bstats",
+			"dev.faststats",
 			"space.arim.dazzleconf"
 		).forEach { pkg ->
 			relocate(pkg, "fi.fabianadrian.operatorlevel.dependency.$pkg")

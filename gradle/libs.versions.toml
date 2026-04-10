@@ -1,16 +1,16 @@
 [versions]
-bstats = "3.1.0"
 adventure = "4.26.1"
 packetevents = "2.12.0"
+faststats = "0.21.0"
 
 [libraries]
 platform-paper = { module = "io.papermc.paper:paper-api", version = "1.21.11-R0.1-SNAPSHOT" }
 
 adventure = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
-bstats-bukkit = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
-bstats-sponge = { module = "org.bstats:bstats-sponge", version.ref = "bstats" }
 dazzleconf = { module = "space.arim.dazzleconf:dazzleconf-toml", version = "2.0.0-M2" }
+faststats-bukkit = { module = "dev.faststats.metrics:bukkit", version.ref = "faststats" }
+faststats-sponge = { module = "dev.faststats.metrics:sponge", version.ref = "faststats" }
 luckperms = { module = "net.luckperms:api", version = "5.5" }
 slf4j = { module = "org.slf4j:slf4j-api", version = "2.0.16" }
 packetevents-api = { module = "com.github.retrooper:packetevents-api", version.ref = "packetevents" }

@@ -10,7 +10,7 @@ dependencies {
     compileOnly(libs.platform.paper)
     compileOnly(libs.packetevents.spigot)
 
-    implementation(libs.bstats.bukkit)
+    implementation(libs.faststats.bukkit)
 }
 
 tasks {
