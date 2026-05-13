@@ -22,7 +22,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 public final class OperatorLevelPaper extends JavaPlugin implements Platform<Player> {
-	private final ErrorTracker errorTracker = ErrorTracker.contextAware();
+	public static final ErrorTracker ERROR_TRACKER = ErrorTracker.contextAware();
 	private final OperatorLevel<Player> operatorLevel;
 	private final PaperLevelProviderManager levelProviderManager;
 	private final Metrics metrics;
@@ -32,7 +32,7 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 		this.levelProviderManager = new PaperLevelProviderManager(this.operatorLevel);
 		this.metrics = BukkitMetrics.factory()
 				.token("0b0987345c22b4cdcbf5d606315abf17")
-				.errorTracker(this.errorTracker)
+				.errorTracker(ERROR_TRACKER)
 				.create(this);
 	}
 
