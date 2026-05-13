@@ -15,6 +15,9 @@ tasks {
 	compileJava {
 		options.encoding = Charsets.UTF_8.name()
 	}
+	build {
+		dependsOn(spotlessApply)
+	}
 }
 
 spotless {
