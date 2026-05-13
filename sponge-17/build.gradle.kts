@@ -9,7 +9,7 @@ plugins {
 dependencies {
 	compileOnly(libs.packetevents.sponge)
 	implementation(libs.slf4j)
-	implementation(libs.bstats.sponge)
+	implementation(libs.faststats.sponge)
 }
 
 tasks {

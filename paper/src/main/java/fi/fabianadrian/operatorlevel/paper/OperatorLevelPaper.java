@@ -1,6 +1,9 @@
 package fi.fabianadrian.operatorlevel.paper;
 
 import com.github.retrooper.packetevents.protocol.player.GameMode;
+import dev.faststats.bukkit.BukkitMetrics;
+import dev.faststats.core.ErrorTracker;
+import dev.faststats.core.Metrics;
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import fi.fabianadrian.operatorlevel.common.Platform;
 import fi.fabianadrian.operatorlevel.common.level.LevelProviderManager;
@@ -9,7 +12,6 @@ import fi.fabianadrian.operatorlevel.paper.level.PaperLevelProviderManager;
 import fi.fabianadrian.operatorlevel.paper.listener.PlayerListener;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,24 +22,34 @@ import java.util.Locale;
 import java.util.UUID;
 
 public final class OperatorLevelPaper extends JavaPlugin implements Platform<Player> {
+	public static final ErrorTracker ERROR_TRACKER = ErrorTracker.contextAware();
 	private final OperatorLevel<Player> operatorLevel;
 	private final PaperLevelProviderManager levelProviderManager;
+	private final Metrics metrics;
 
 	public OperatorLevelPaper() {
 		this.operatorLevel = new OperatorLevel<>(this);
 		this.levelProviderManager = new PaperLevelProviderManager(this.operatorLevel);
+		this.metrics = BukkitMetrics.factory()
+				.token("0b0987345c22b4cdcbf5d606315abf17")
+				.errorTracker(ERROR_TRACKER)
+				.create(this);
 	}
 
 	@Override
 	public void onEnable() {
+		this.metrics.ready();
 		this.operatorLevel.load();
 
 		PaperOperatorLevelCommand operatorLevelCommand = new PaperOperatorLevelCommand(this);
 		operatorLevelCommand.register();
 
 		registerListeners();
+	}
 
-		new Metrics(this, 23464);
+	@Override
+	public void onDisable() {
+		this.metrics.shutdown();
 	}
 
 	@Override
