@@ -4,7 +4,7 @@ packetevents = "2.12.0"
 faststats = "0.22.0"
 
 [libraries]
-platform-paper = { module = "io.papermc.paper:paper-api", version = "1.21.11-R0.1-SNAPSHOT" }
+platform-paper = { module = "io.papermc.paper:paper-api", version = "26.1.2.build.+" }
 
 adventure = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
