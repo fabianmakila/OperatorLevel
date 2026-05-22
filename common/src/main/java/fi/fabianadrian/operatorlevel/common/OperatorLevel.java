@@ -47,7 +47,11 @@ public final class OperatorLevel<P> {
 	}
 
 	public void updateLevel(UUID uuid) {
-		updateLevel(this.plugin.player(uuid));
+		P player = this.plugin.player(uuid);
+		if (player == null) {
+			return;
+		}
+		updateLevel(player);
 	}
 
 	public void updateLevel(P player) {
