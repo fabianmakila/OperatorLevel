@@ -14,7 +14,6 @@ import org.bukkit.plugin.Plugin;
 
 import static io.papermc.paper.command.brigadier.Commands.literal;
 
-@SuppressWarnings("UnstableApiUsage")
 public final class PaperOperatorLevelCommand extends OperatorLevelCommand {
 	private final OperatorLevelPaper plugin;
 	private final LifecycleEventManager<Plugin> manager;

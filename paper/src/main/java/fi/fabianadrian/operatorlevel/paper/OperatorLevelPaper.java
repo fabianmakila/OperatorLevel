@@ -5,11 +5,12 @@ import dev.faststats.bukkit.BukkitMetrics;
 import dev.faststats.core.ErrorTracker;
 import dev.faststats.core.Metrics;
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
-import fi.fabianadrian.operatorlevel.common.Platform;
+import fi.fabianadrian.operatorlevel.common.OperatorLevelPlugin;
 import fi.fabianadrian.operatorlevel.common.level.LevelProviderManager;
+import fi.fabianadrian.operatorlevel.common.listener.ListenerManager;
 import fi.fabianadrian.operatorlevel.paper.command.PaperOperatorLevelCommand;
 import fi.fabianadrian.operatorlevel.paper.level.PaperLevelProviderManager;
-import fi.fabianadrian.operatorlevel.paper.listener.PlayerListener;
+import fi.fabianadrian.operatorlevel.paper.listener.PaperListenerManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.bukkit.Bukkit;
@@ -21,14 +22,16 @@ import java.nio.file.Path;
 import java.util.Locale;
 import java.util.UUID;
 
-public final class OperatorLevelPaper extends JavaPlugin implements Platform<Player> {
+public final class OperatorLevelPaper extends JavaPlugin implements OperatorLevelPlugin<Player> {
 	public static final ErrorTracker ERROR_TRACKER = ErrorTracker.contextAware();
 	private final OperatorLevel<Player> operatorLevel;
 	private final PaperLevelProviderManager levelProviderManager;
+	private final PaperListenerManager listenerManager;
 	private final Metrics metrics;
 
 	public OperatorLevelPaper() {
 		this.operatorLevel = new OperatorLevel<>(this);
+		this.listenerManager = new PaperListenerManager(this, this.operatorLevel);
 		this.levelProviderManager = new PaperLevelProviderManager(this.operatorLevel);
 		this.metrics = BukkitMetrics.factory()
 				.token("0b0987345c22b4cdcbf5d606315abf17")
@@ -39,12 +42,10 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 	@Override
 	public void onEnable() {
 		this.metrics.ready();
-		this.operatorLevel.load();
+		this.operatorLevel.start();
 
 		PaperOperatorLevelCommand operatorLevelCommand = new PaperOperatorLevelCommand(this);
 		operatorLevelCommand.register();
-
-		registerListeners();
 	}
 
 	@Override
@@ -59,7 +60,7 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 
 	@Override
 	public Path configDirectory() {
-		return getDataFolder().toPath();
+		return getDataPath();
 	}
 
 	@Override
@@ -93,9 +94,9 @@ public final class OperatorLevelPaper extends JavaPlugin implements Platform<Pla
 		return this.levelProviderManager;
 	}
 
-	public void registerListeners() {
-		getServer().getPluginManager().registerEvents(new PlayerListener(this.operatorLevel), this);
-		this.operatorLevel.registerPacketEventsListeners();
+	@Override
+	public ListenerManager<Player> listenerManager() {
+		return this.listenerManager;
 	}
 
 	public void reload() {

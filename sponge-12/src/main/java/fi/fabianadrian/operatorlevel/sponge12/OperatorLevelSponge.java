@@ -6,11 +6,12 @@ import dev.faststats.core.ErrorTracker;
 import dev.faststats.core.Metrics;
 import dev.faststats.sponge.SpongeMetrics;
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
-import fi.fabianadrian.operatorlevel.common.Platform;
+import fi.fabianadrian.operatorlevel.common.OperatorLevelPlugin;
 import fi.fabianadrian.operatorlevel.common.level.LevelProviderManager;
+import fi.fabianadrian.operatorlevel.common.listener.ListenerManager;
 import fi.fabianadrian.operatorlevel.sponge12.command.SpongeOperatorLevelCommand;
 import fi.fabianadrian.operatorlevel.sponge12.level.SpongeLevelProviderManager;
-import fi.fabianadrian.operatorlevel.sponge12.listener.PlayerListener;
+import fi.fabianadrian.operatorlevel.sponge12.listener.SpongeListenerManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.slf4j.Logger;
@@ -28,15 +29,13 @@ import org.spongepowered.api.event.lifecycle.StartedEngineEvent;
 import org.spongepowered.api.event.lifecycle.StoppingEngineEvent;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.plugin.PluginContainer;
-import org.spongepowered.plugin.builtin.jvm.Plugin;
 
-import java.lang.invoke.MethodHandles;
 import java.nio.file.Path;
 import java.util.Locale;
 import java.util.UUID;
 
-@Plugin("operatorlevel")
-public final class OperatorLevelSponge implements Platform<ServerPlayer> {
+@org.spongepowered.plugin.builtin.jvm.Plugin("operatorlevel")
+public final class OperatorLevelSponge implements OperatorLevelPlugin<ServerPlayer> {
 	private final PluginContainer container;
 	private final OperatorLevel<ServerPlayer> operatorLevel;
 	private final Logger logger;
@@ -44,6 +43,7 @@ public final class OperatorLevelSponge implements Platform<ServerPlayer> {
 	private final SpongeLevelProviderManager levelProviderManager;
 	private final SpongeMetrics.Factory metricsFactory;
 	private final ErrorTracker errorTracker = ErrorTracker.contextAware();
+	private final SpongeListenerManager listenerManager;
 	private Metrics metrics;
 
 	@Inject
@@ -58,6 +58,7 @@ public final class OperatorLevelSponge implements Platform<ServerPlayer> {
 
 		this.operatorLevel = new OperatorLevel<>(this);
 
+		this.listenerManager = new SpongeListenerManager(this, this.operatorLevel, container);
 		this.levelProviderManager = new SpongeLevelProviderManager(this.operatorLevel);
 		this.metricsFactory = metricsFactory;
 	}
@@ -67,8 +68,7 @@ public final class OperatorLevelSponge implements Platform<ServerPlayer> {
 		this.metrics = this.metricsFactory
 				.errorTracker(this.errorTracker)
 				.create(this.container);
-		this.operatorLevel.load();
-		registerListeners();
+		this.operatorLevel.start();
 	}
 
 	@Listener
@@ -123,9 +123,9 @@ public final class OperatorLevelSponge implements Platform<ServerPlayer> {
 		return this.levelProviderManager;
 	}
 
-	public void registerListeners() {
-		Sponge.eventManager().registerListeners(this.container, new PlayerListener(this.operatorLevel), MethodHandles.lookup());
-		this.operatorLevel.registerPacketEventsListeners();
+	@Override
+	public ListenerManager<ServerPlayer> listenerManager() {
+		return this.listenerManager;
 	}
 
 	public void reload() {
