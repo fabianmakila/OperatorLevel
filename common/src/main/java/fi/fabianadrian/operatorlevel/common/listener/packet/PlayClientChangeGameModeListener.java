@@ -1,11 +1,12 @@
-package fi.fabianadrian.operatorlevel.common.packet.listener;
+package fi.fabianadrian.operatorlevel.common.listener.packet;
 
+import com.github.retrooper.packetevents.event.PacketListener;
 import com.github.retrooper.packetevents.event.PacketReceiveEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.client.WrapperPlayClientChangeGameMode;
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 
-public final class PlayClientChangeGameModeListener implements com.github.retrooper.packetevents.event.PacketListener {
+public final class PlayClientChangeGameModeListener implements PacketListener {
 	private final OperatorLevel<?> operatorLevel;
 
 	public PlayClientChangeGameModeListener(OperatorLevel<?> operatorLevel) {

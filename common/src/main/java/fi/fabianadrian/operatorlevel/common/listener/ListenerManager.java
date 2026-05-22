@@ -5,8 +5,8 @@ import com.github.retrooper.packetevents.event.EventManager;
 import com.github.retrooper.packetevents.event.PacketListenerPriority;
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import fi.fabianadrian.operatorlevel.common.OperatorLevelPlugin;
-import fi.fabianadrian.operatorlevel.common.packet.listener.PlayClientChangeGameModeListener;
-import fi.fabianadrian.operatorlevel.common.packet.listener.PlayServerEntityStatusListener;
+import fi.fabianadrian.operatorlevel.common.listener.packet.PlayClientChangeGameModeListener;
+import fi.fabianadrian.operatorlevel.common.listener.packet.PlayServerEntityStatusListener;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ public abstract class ListenerManager<P> {
 		EventManager manager = PacketEvents.getAPI().getEventManager();
 		List.of(
 				new PlayClientChangeGameModeListener(this.operatorLevel),
-				new PlayServerEntityStatusListener(this.operatorLevel)
+				new PlayServerEntityStatusListener<>(this.operatorLevel)
 		).forEach(listener -> manager.registerListener(listener, PacketListenerPriority.NORMAL));
 	}
 }

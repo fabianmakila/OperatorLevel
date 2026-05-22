@@ -1,14 +1,15 @@
-package fi.fabianadrian.operatorlevel.common.packet.listener;
+package fi.fabianadrian.operatorlevel.common.listener.packet;
 
+import com.github.retrooper.packetevents.event.PacketListener;
 import com.github.retrooper.packetevents.event.PacketSendEvent;
 import com.github.retrooper.packetevents.protocol.packettype.PacketType;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityStatus;
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 
-public final class PlayServerEntityStatusListener implements com.github.retrooper.packetevents.event.PacketListener {
-	private final OperatorLevel<?> operatorLevel;
+public final class PlayServerEntityStatusListener<P> implements PacketListener {
+	private final OperatorLevel<P> operatorLevel;
 
-	public PlayServerEntityStatusListener(OperatorLevel<?> operatorLevel) {
+	public PlayServerEntityStatusListener(OperatorLevel<P> operatorLevel) {
 		this.operatorLevel = operatorLevel;
 	}
 
@@ -26,7 +27,8 @@ public final class PlayServerEntityStatusListener implements com.github.retroope
 			if (event.getPlayer() == null) {
 				return;
 			}
-			this.operatorLevel.updateLevel(event.getPlayer());
+			P player = event.getPlayer();
+			this.operatorLevel.updateLevel(player);
 		}
 	}
 }
