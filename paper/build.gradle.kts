@@ -16,9 +16,9 @@ dependencies {
 tasks {
     runServer {
         // This should be the minimum supported version
-        minecraftVersion("1.21.4")
+        minecraftVersion("1.21.6")
         downloadPlugins {
-            modrinth("packetevents", "2.11.0+spigot")
+            modrinth("packetevents", "2.12.1+spigot")
         }
     }
 }
@@ -27,7 +27,7 @@ paperPluginYaml {
     main = "fi.fabianadrian.operatorlevel.paper.OperatorLevelPaper"
     name = rootProject.name
     foliaSupported = true
-    apiVersion = "1.21.4"
+    apiVersion = "1.21.6"
     author = "FabianAdrian"
     website = "https://modrinth.com/plugin/operatorlevel"
 
