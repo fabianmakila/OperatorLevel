@@ -1,7 +1,8 @@
 [versions]
 adventure = "4.26.1"
-packetevents = "2.12.1"
-faststats = "0.22.0"
+packetevents = "2.13.0"
+faststats = "0.27.1"
+strokkcommands = "2.1.4"
 
 [libraries]
 platform-paper = { module = "io.papermc.paper:paper-api", version = "26.1.2.build.+" }
@@ -12,10 +13,12 @@ dazzleconf = { module = "space.arim.dazzleconf:dazzleconf-toml", version = "2.0.
 faststats-bukkit = { module = "dev.faststats.metrics:bukkit", version.ref = "faststats" }
 faststats-sponge = { module = "dev.faststats.metrics:sponge", version.ref = "faststats" }
 luckperms = { module = "net.luckperms:api", version = "5.5" }
-slf4j = { module = "org.slf4j:slf4j-api", version = "2.0.16" }
+slf4j = { module = "org.slf4j:slf4j-api", version = "2.0.17" }
 packetevents-api = { module = "com.github.retrooper:packetevents-api", version.ref = "packetevents" }
 packetevents-spigot = { module = "com.github.retrooper:packetevents-spigot", version.ref = "packetevents" }
 packetevents-sponge = { module = "com.github.retrooper:packetevents-sponge", version.ref = "packetevents" }
+strokkcommands-annotations-paper = { module = "net.strokkur.commands:annotations-paper", version.ref = "strokkcommands" }
+strokkcommands-processor-paper = { module = "net.strokkur.commands:processor-paper", version.ref = "strokkcommands" }
 
 [plugins]
 sponge = { id = "org.spongepowered.gradle.plugin", version = "2.3.0" }

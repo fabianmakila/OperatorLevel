@@ -1,16 +1,17 @@
 package fi.fabianadrian.operatorlevel.paper;
 
 import com.github.retrooper.packetevents.protocol.player.GameMode;
-import dev.faststats.bukkit.BukkitMetrics;
-import dev.faststats.core.ErrorTracker;
-import dev.faststats.core.Metrics;
+import dev.faststats.ErrorTracker;
+import dev.faststats.Metrics;
+import dev.faststats.bukkit.BukkitContext;
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import fi.fabianadrian.operatorlevel.common.OperatorLevelPlugin;
 import fi.fabianadrian.operatorlevel.common.level.LevelProviderManager;
 import fi.fabianadrian.operatorlevel.common.listener.ListenerManager;
-import fi.fabianadrian.operatorlevel.paper.command.PaperOperatorLevelCommand;
+import fi.fabianadrian.operatorlevel.paper.command.PaperOperatorLevelCommandBrigadier;
 import fi.fabianadrian.operatorlevel.paper.level.PaperLevelProviderManager;
 import fi.fabianadrian.operatorlevel.paper.listener.PaperListenerManager;
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
 import org.bukkit.Bukkit;
@@ -27,30 +28,31 @@ public final class OperatorLevelPaper extends JavaPlugin implements OperatorLeve
 	private final OperatorLevel<Player> operatorLevel;
 	private final PaperLevelProviderManager levelProviderManager;
 	private final PaperListenerManager listenerManager;
-	private final Metrics metrics;
+	private final BukkitContext context;
 
 	public OperatorLevelPaper() {
 		this.operatorLevel = new OperatorLevel<>(this);
 		this.listenerManager = new PaperListenerManager(this, this.operatorLevel);
 		this.levelProviderManager = new PaperLevelProviderManager(this.operatorLevel);
-		this.metrics = BukkitMetrics.factory()
-				.token("0b0987345c22b4cdcbf5d606315abf17")
-				.errorTracker(ERROR_TRACKER)
-				.create(this);
+		this.context = new BukkitContext.Factory(this, "0b0987345c22b4cdcbf5d606315abf17")
+				.errorTrackerService(ERROR_TRACKER)
+				.metrics(Metrics.Factory::create)
+				.create();
 	}
 
 	@Override
 	public void onEnable() {
-		this.metrics.ready();
+		this.context.ready();
 		this.operatorLevel.start();
 
-		PaperOperatorLevelCommand operatorLevelCommand = new PaperOperatorLevelCommand(this);
-		operatorLevelCommand.register();
+		getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
+			commands.registrar().register(PaperOperatorLevelCommandBrigadier.create(this));
+		});
 	}
 
 	@Override
 	public void onDisable() {
-		this.metrics.shutdown();
+		this.context.shutdown();
 	}
 
 	@Override

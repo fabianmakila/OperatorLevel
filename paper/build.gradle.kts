@@ -8,9 +8,12 @@ plugins {
 
 dependencies {
     compileOnly(libs.platform.paper)
-    compileOnly(libs.packetevents.spigot)
 
+    compileOnly(libs.packetevents.spigot)
     implementation(libs.faststats.bukkit)
+
+    compileOnly(libs.strokkcommands.annotations.paper)
+    annotationProcessor(libs.strokkcommands.processor.paper)
 }
 
 tasks {

@@ -2,9 +2,9 @@ package fi.fabianadrian.operatorlevel.sponge17;
 
 import com.github.retrooper.packetevents.protocol.player.GameMode;
 import com.google.inject.Inject;
-import dev.faststats.core.ErrorTracker;
-import dev.faststats.core.Metrics;
-import dev.faststats.sponge.SpongeMetrics;
+import dev.faststats.ErrorTracker;
+import dev.faststats.Metrics;
+import dev.faststats.sponge.SpongeContext;
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
 import fi.fabianadrian.operatorlevel.common.OperatorLevelPlugin;
 import fi.fabianadrian.operatorlevel.common.level.LevelProviderManager;
@@ -14,6 +14,7 @@ import fi.fabianadrian.operatorlevel.sponge17.level.SpongeLevelProviderManager;
 import fi.fabianadrian.operatorlevel.sponge17.listener.SpongeListenerManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.translation.Argument;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.spongepowered.api.ResourceKey;
@@ -29,28 +30,28 @@ import org.spongepowered.api.event.lifecycle.StartedEngineEvent;
 import org.spongepowered.api.event.lifecycle.StoppingEngineEvent;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.plugin.PluginContainer;
+import org.spongepowered.plugin.builtin.jvm.Plugin;
 
 import java.nio.file.Path;
 import java.util.Locale;
 import java.util.UUID;
 
-@org.spongepowered.plugin.builtin.jvm.Plugin("operatorlevel")
+@Plugin("operatorlevel")
 public final class OperatorLevelSponge implements OperatorLevelPlugin<ServerPlayer> {
+	private static final ErrorTracker ERROR_TRACKER = ErrorTracker.contextAware();
 	private final PluginContainer container;
 	private final OperatorLevel<ServerPlayer> operatorLevel;
 	private final Logger logger;
 	private final Path configDirectory;
 	private final SpongeLevelProviderManager levelProviderManager;
-	private final SpongeMetrics.Factory metricsFactory;
-	private final ErrorTracker errorTracker = ErrorTracker.contextAware();
 	private final SpongeListenerManager listenerManager;
-	private Metrics metrics;
+	private @Nullable SpongeContext context = null;
+	private @Inject SpongeContext.Builder contextBuilder;
 
 	@Inject
 	public OperatorLevelSponge(
 			PluginContainer container,
-			@ConfigDir(sharedRoot = false) Path configDirectory,
-			SpongeMetrics.Factory metricsFactory
+			@ConfigDir(sharedRoot = false) Path configDirectory
 	) {
 		this.container = container;
 		this.configDirectory = configDirectory;
@@ -60,23 +61,23 @@ public final class OperatorLevelSponge implements OperatorLevelPlugin<ServerPlay
 
 		this.listenerManager = new SpongeListenerManager(this, this.operatorLevel, container);
 		this.levelProviderManager = new SpongeLevelProviderManager(this.operatorLevel);
-
-		this.metricsFactory = metricsFactory;
 	}
 
 	@Listener
 	public void onServerStart(final StartedEngineEvent<Server> event) {
-		this.metrics = this.metricsFactory
-				.errorTracker(this.errorTracker)
-				.create(this.container);
+		this.context = this.contextBuilder
+				.token("0b0987345c22b4cdcbf5d606315abf17")
+				.errorTrackerService(ERROR_TRACKER)
+				.metrics(Metrics.Factory::create)
+				.create();
 
 		this.operatorLevel.start();
 	}
 
 	@Listener
 	public void onServerStop(final StoppingEngineEvent<Server> event) {
-		if (this.metrics != null) {
-			this.metrics.shutdown();
+		if (this.context != null) {
+			this.context.shutdown();
 		}
 	}
 
