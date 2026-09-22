@@ -12,15 +12,8 @@ tasks {
 		dependsOn(shadowJar)
 	}
 	shadowJar {
-		archiveBaseName.set("${rootProject.name}-${project.name.replaceFirstChar(Char::titlecase)}")
+		archiveBaseName.set(project.prefixedPluginName)
 		archiveClassifier.set("")
 		destinationDirectory.set(rootProject.layout.buildDirectory.dir("libs"))
-
-		sequenceOf(
-			"dev.faststats",
-			"space.arim.dazzleconf"
-		).forEach { pkg ->
-			relocate(pkg, "fi.fabianadrian.operatorlevel.dependency.$pkg")
-		}
 	}
 }

@@ -1,3 +1,7 @@
+plugins {
+	alias(libs.plugins.spotless) apply false
+}
+
 group = "fi.fabianadrian"
 version = "3.2.1-SNAPSHOT"
 description = "Allow players to use F3+F4 and similar client features without giving them OP permissions."

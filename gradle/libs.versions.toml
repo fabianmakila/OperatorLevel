@@ -24,3 +24,6 @@ strokkcommands-processor-paper = { module = "net.strokkur.commands:processor-pap
 sponge = { id = "org.spongepowered.gradle.plugin", version = "2.3.0" }
 resourceFactory-paper = { id = "xyz.jpenilla.resource-factory-paper-convention", version = "1.3.1" }
 run-paper = { id = "xyz.jpenilla.run-paper", version = "3.0.2" }
+shadow = { id = "com.gradleup.shadow", version = "9.6.1" }
+spotless = { id = "com.diffplug.spotless", version = "8.9.0" }
+versions = { id = "io.github.ben-manes.versions", version = "0.61.0" }

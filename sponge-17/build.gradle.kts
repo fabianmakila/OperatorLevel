@@ -2,24 +2,13 @@ import org.spongepowered.gradle.plugin.config.PluginLoaders
 import org.spongepowered.plugin.metadata.model.PluginDependency
 
 plugins {
-	id("operatorlevel.platform-conventions")
-	alias(libs.plugins.sponge)
+	id("operatorlevel.sponge-conventions")
 }
 
 dependencies {
 	compileOnly(libs.packetevents.sponge)
 	implementation(libs.slf4j)
 	implementation(libs.faststats.sponge)
-}
-
-tasks {
-	shadowJar {
-		sequenceOf(
-			"org.slf4j"
-		).forEach { pkg ->
-			relocate(pkg, "fi.fabianadrian.operatorlevel.dependency.$pkg")
-		}
-	}
 }
 
 sponge {

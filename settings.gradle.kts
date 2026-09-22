@@ -1,5 +1,7 @@
 rootProject.name = "OperatorLevel"
 
+includeBuild("build-logic")
+
 listOf(
 	"common",
 	"paper",
