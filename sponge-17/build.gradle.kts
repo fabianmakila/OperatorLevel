@@ -21,7 +21,7 @@ sponge {
 	}
 	plugin(rootProject.name.lowercase()) {
 		displayName(rootProject.name)
-		entrypoint("fi.fabianadrian.operatorlevel.sponge.OperatorLevelSponge")
+		entrypoint("fi.fabianadrian.operatorlevel.sponge17.OperatorLevelSponge")
 		description(rootProject.description)
 		dependency("spongeapi") {
 			loadOrder(PluginDependency.LoadOrder.AFTER)
