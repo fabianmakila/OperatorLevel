@@ -1,4 +1,5 @@
 plugins {
+	alias(libs.plugins.versions)
 	alias(libs.plugins.spotless) apply false
 }
 

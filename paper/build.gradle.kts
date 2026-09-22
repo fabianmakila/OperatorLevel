@@ -21,7 +21,7 @@ tasks {
         // This should be the minimum supported version
         minecraftVersion("1.21.6")
         downloadPlugins {
-            modrinth("packetevents", "2.12.1+spigot")
+            modrinth("packetevents", "2.13.0+spigot")
         }
     }
 }

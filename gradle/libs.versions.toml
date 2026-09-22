@@ -1,15 +1,15 @@
 [versions]
-adventure = "4.26.1"
+adventure = "5.2.0"
 packetevents = "2.13.0"
-faststats = "0.27.1"
-strokkcommands = "2.1.4"
+faststats = "0.30.1"
+strokkcommands = "2.3.0"
 
 [libraries]
-platform-paper = { module = "io.papermc.paper:paper-api", version = "26.1.2.build.+" }
+platform-paper = { module = "io.papermc.paper:paper-api", version = "26.2.build.+" }
 
 adventure = { module = "net.kyori:adventure-api", version.ref = "adventure" }
 adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "adventure" }
-dazzleconf = { module = "space.arim.dazzleconf:dazzleconf-toml", version = "2.0.0-M2" }
+dazzleconf = { module = "space.arim.dazzleconf:dazzleconf-toml", version = "2.0.0-M3" }
 faststats-bukkit = { module = "dev.faststats.metrics:bukkit", version.ref = "faststats" }
 faststats-sponge = { module = "dev.faststats.metrics:sponge", version.ref = "faststats" }
 luckperms = { module = "net.luckperms:api", version = "5.5" }
@@ -23,7 +23,7 @@ strokkcommands-processor-paper = { module = "net.strokkur.commands:processor-pap
 [plugins]
 sponge = { id = "org.spongepowered.gradle.plugin", version = "2.3.0" }
 resourceFactory-paper = { id = "xyz.jpenilla.resource-factory-paper-convention", version = "1.3.1" }
-run-paper = { id = "xyz.jpenilla.run-paper", version = "3.0.2" }
+run-paper = { id = "xyz.jpenilla.run-paper", version = "3.1.0" }
 shadow = { id = "com.gradleup.shadow", version = "9.6.1" }
-spotless = { id = "com.diffplug.spotless", version = "8.9.0" }
-versions = { id = "io.github.ben-manes.versions", version = "0.61.0" }
+spotless = { id = "com.diffplug.spotless", version = "8.10.2" }
+versions = { id = "io.github.ben-manes.versions", version = "0.64.0" }
