@@ -1,6 +1,7 @@
 package fi.fabianadrian.operatorlevel.common.config;
 
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
+import fi.fabianadrian.operatorlevel.common.config.liaison.LocaleLiaison;
 import space.arim.dazzleconf.Configuration;
 import space.arim.dazzleconf.StandardErrorPrint;
 import space.arim.dazzleconf.backend.Backend;
@@ -14,7 +15,7 @@ public final class ConfigManager {
 	private OperatorLevelConfig config;
 
 	public ConfigManager(OperatorLevel<?> operatorLevel) {
-		this.configuration = Configuration.defaultBuilder(OperatorLevelConfig.class).build();
+		this.configuration = Configuration.defaultBuilder(OperatorLevelConfig.class).addTypeLiaisons(new LocaleLiaison()).build();
 		this.backend = new TomlBackend(new PathRoot(operatorLevel.configDirectory().resolve("config.toml")));
 		this.errorPrint = new StandardErrorPrint(output -> operatorLevel.logger().error(output.printString()));
 	}

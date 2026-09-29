@@ -1,6 +1,7 @@
 package fi.fabianadrian.operatorlevel.common.locale;
 
 import fi.fabianadrian.operatorlevel.common.OperatorLevel;
+import fi.fabianadrian.operatorlevel.common.config.OperatorLevelConfig;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.minimessage.translation.MiniMessageTranslationStore;
 import net.kyori.adventure.translation.GlobalTranslator;
@@ -16,13 +17,15 @@ import java.nio.file.Path;
 import java.util.*;
 
 public final class TranslationManager {
-	private static final List<Locale> BUNDLED_LOCALES = List.of(Locale.US, Locale.of("fi", "FI"));
+	private static final List<Locale> BUNDLED_LOCALES = List.of(Locale.ENGLISH, Locale.of("fi", "FI"));
 	private final Path localeDirectoryPath;
 
 	private final Logger logger;
+	private final OperatorLevel<?> operatorLevel;
 	private MiniMessageTranslationStore store;
 
 	public TranslationManager(OperatorLevel<?> operatorLevel) {
+		this.operatorLevel = operatorLevel;
 		this.logger = operatorLevel.logger();
 		this.localeDirectoryPath = operatorLevel.configDirectory().resolve("locale");
 	}
@@ -32,6 +35,9 @@ public final class TranslationManager {
 	}
 
 	public void load() {
+		OperatorLevelConfig config = this.operatorLevel.config();
+		this.store.defaultLocale(config.defaultLocale());
+
 		if (this.store != null) {
 			GlobalTranslator.translator().removeSource(this.store);
 		}
@@ -41,7 +47,7 @@ public final class TranslationManager {
 		createLocaleDirectory();
 		copyToLocaleDirectory();
 		registerFromLocaleDirectory();
-		registerDefaultLocale();
+		registerEnglishFallbackForLocale(config.defaultLocale());
 
 		GlobalTranslator.translator().addSource(this.store);
 	}
@@ -55,8 +61,8 @@ public final class TranslationManager {
 	}
 
 	private void copyToLocaleDirectory() {
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(this.localeDirectoryPath, "*.properties")) {
-			if (stream.iterator().hasNext()) {
+		try {
+			if (directoryContainsFilesOfType(this.localeDirectoryPath, ".properties")) {
 				return;
 			}
 		} catch (IOException e) {
@@ -77,6 +83,15 @@ public final class TranslationManager {
 				this.logger.error("Couldn't write bundled locale", e);
 			}
 		});
+	}
+
+	private boolean directoryContainsFilesOfType(Path directory, String fileExtension) throws IOException {
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory, "*" + fileExtension)) {
+			if (stream.iterator().hasNext()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void registerFromLocaleDirectory() {
@@ -109,15 +124,15 @@ public final class TranslationManager {
 		}
 	}
 
-	private void registerDefaultLocale() {
-		ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.US);
+	private void registerEnglishFallbackForLocale(Locale locale) {
+		ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.ENGLISH);
 		try {
-			this.store.registerAll(Locale.US, bundle, false);
+			this.store.registerAll(locale, bundle, false);
 		} catch (IllegalArgumentException e) {
 			if (isAdventureDuplicatesException(e)) {
 				return;
 			}
-			this.logger.warn("Error registering default locale", e);
+			this.logger.warn("Error registering fallback locale", e);
 		}
 	}
 
