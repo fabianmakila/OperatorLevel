@@ -30,10 +30,6 @@ public final class TranslationManager {
 		this.localeDirectoryPath = operatorLevel.configDirectory().resolve("locale");
 	}
 
-	private static boolean isAdventureDuplicatesException(Exception e) {
-		return e instanceof IllegalArgumentException && (e.getMessage().startsWith("Invalid key") || e.getMessage().startsWith("Translation already exists"));
-	}
-
 	public void load() {
 		if (this.store != null) {
 			GlobalTranslator.translator().removeSource(this.store);
@@ -47,9 +43,13 @@ public final class TranslationManager {
 		createLocaleDirectory();
 		copyToLocaleDirectory();
 		registerFromLocaleDirectory();
-		registerEnglishFallbackForLocale(config.defaultLocale());
+		registerFallbackForLocale(config.defaultLocale());
 
 		GlobalTranslator.translator().addSource(this.store);
+	}
+
+	private boolean isAdventureDuplicatesException(Exception e) {
+		return e instanceof IllegalArgumentException && (e.getMessage().startsWith("Invalid key") || e.getMessage().startsWith("Translation already exists"));
 	}
 
 	private void createLocaleDirectory() {
@@ -61,12 +61,7 @@ public final class TranslationManager {
 	}
 
 	private void copyToLocaleDirectory() {
-		try {
-			if (directoryContainsFilesOfType(this.localeDirectoryPath, ".properties")) {
-				return;
-			}
-		} catch (IOException e) {
-			this.logger.error("Couldn't read locale directory");
+		if (localeDirectoryContainsTranslations()) {
 			return;
 		}
 
@@ -85,11 +80,14 @@ public final class TranslationManager {
 		});
 	}
 
-	private boolean directoryContainsFilesOfType(Path directory, String fileExtension) throws IOException {
-		try (DirectoryStream<Path> stream = Files.newDirectoryStream(directory, "*" + fileExtension)) {
+	private boolean localeDirectoryContainsTranslations() {
+		try (DirectoryStream<Path> stream = Files.newDirectoryStream(this.localeDirectoryPath, "*.properties")) {
 			if (stream.iterator().hasNext()) {
 				return true;
 			}
+		} catch (IOException exception) {
+			this.logger.error("Couldn't read locale directory", exception);
+			return true; //Assume there are files even if we can't read them
 		}
 		return false;
 	}
@@ -124,7 +122,7 @@ public final class TranslationManager {
 		}
 	}
 
-	private void registerEnglishFallbackForLocale(Locale locale) {
+	private void registerFallbackForLocale(Locale locale) {
 		ResourceBundle bundle = ResourceBundle.getBundle("messages", Locale.ENGLISH);
 		try {
 			this.store.registerAll(locale, bundle, false);
