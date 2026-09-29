@@ -35,14 +35,14 @@ public final class TranslationManager {
 	}
 
 	public void load() {
-		OperatorLevelConfig config = this.operatorLevel.config();
-		this.store.defaultLocale(config.defaultLocale());
-
 		if (this.store != null) {
 			GlobalTranslator.translator().removeSource(this.store);
 		}
 
 		this.store = MiniMessageTranslationStore.create(Key.key("operatorlevel", "main"));
+
+		OperatorLevelConfig config = this.operatorLevel.config();
+		this.store.defaultLocale(config.defaultLocale());
 
 		createLocaleDirectory();
 		copyToLocaleDirectory();
