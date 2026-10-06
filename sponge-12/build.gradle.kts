@@ -23,6 +23,11 @@ sponge {
 		displayName(rootProject.name)
 		entrypoint("fi.fabianadrian.operatorlevel.sponge12.OperatorLevelSponge")
 		description(rootProject.description)
+		links {
+			homepage("https://ore.spongepowered.org/fabianadrian/OperatorLevel")
+			source("https://github.com/fabianmakila/OperatorLevel")
+			issues("https://github.com/fabianmakila/OperatorLevel/issues")
+		}
 		dependency("spongeapi") {
 			loadOrder(PluginDependency.LoadOrder.AFTER)
 			optional(false)

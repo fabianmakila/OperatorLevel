@@ -1,6 +1,6 @@
 [versions]
 adventure = "5.2.0"
-packetevents = "2.13.0"
+packetevents = "2.14.0"
 faststats = "0.30.1"
 strokkcommands = "2.3.0"
 
