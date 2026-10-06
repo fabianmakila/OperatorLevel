@@ -19,8 +19,8 @@ public final class OperatorLevel<P> {
 	public OperatorLevel(OperatorLevelPlugin<P> plugin) {
 		this.plugin = plugin;
 
-		this.translationManager = new TranslationManager(this);
 		this.configManager = new ConfigManager(this);
+		this.translationManager = new TranslationManager(this);
 	}
 
 	public void start() {
@@ -29,8 +29,8 @@ public final class OperatorLevel<P> {
 	}
 
 	public void load() {
-		this.translationManager.load();
 		this.configManager.load();
+		this.translationManager.load();
 		this.plugin.levelProviderManager().load();
 	}
 
